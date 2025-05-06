@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mini Mart - Online Store</title>
+    <link rel="canonical" href="https://shop-easy06.netlify.app/index.html" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Header/Navbar -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                  <img src="d27ba092-b9d7-43b4-b5fc-389c5cd01465.png">
+                  <h3> <span style="color: red;"> M</span>ini Mart </h3>
+            </div>
+            <div class="search-box">
+                <input type="text" id="search-input" placeholder="Search products...">
+                <button id="search-btn"><i class="fas fa-search"></i></button>
+                <button id="clear-search-btn" style="display:none; margin-left: -4px;"><i class="fas fa-times"></i></button>
+              </div>
+              
+              <div class="live-search-results" id="live-search-results">
+                <div class="results-container" id="results-container"></div>
+              </div>
+            <nav class="nav">
+                <ul>
+                    <li><a href="/about-us"><i class="fas fa-user"></i> <span class="nav-text">About Us</span></a></li>
+                    <li><a href="/coupons"><i class="fas fa-gift"></i> <span class="nav-text">Coupons</span></a></li>
+                    <li><a href="#" id="cart-btn"><i class="fas fa-shopping-cart"></i> <span class="nav-text">Cart</span> <span id="cart-count">0</span></a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Desktop Carousel -->
+    <div class="featured-today">
+        <div class="carousel">
+        <div class="carousel-item active">
+            <img src="https://rukminim2.flixcart.com/fk-p-flap/1620/270/image/6d77f08d0d510f69.jpg?q=20" class="desktop-image">
+            <img src="https://rukminim1.flixcart.com/fk-p-flap/480/230/image/95f0ad99af51e2c1.jpeg?q=20" class="mobile-image">
+        </div>
+        <div class="carousel-item">
+            <img src="https://rukminim2.flixcart.com/fk-p-flap/1620/270/image/957b83213656304b.jpg?q=20" class="desktop-image">
+            <img src="https://rukminim1.flixcart.com/fk-p-flap/480/230/image/a5391532963cbaba.jpeg?q=20" class="mobile-image">
+        </div>
+        <div class="carousel-item">
+            <img src="https://rukminim2.flixcart.com/fk-p-flap/1620/270/image/344ff33887cce3b0.jpg?q=20" class="desktop-image">
+            <img src="https://rukminim1.flixcart.com/fk-p-flap/480/230/image/b95ace00fd59eb25.jpeg?q=20" class="mobile-image">
+        </div>
+        </div>
+    </div>
+
+    <div class="dots">
+        <span class="dot active"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main">
+        <!-- Product Sections -->
+        <section class="products-container">
+            <!-- Categories -->
+            <section class="top-categories product">
+                <h2>Top Categories</h2>
+                <div class="categories">
+                  <div class="category">
+                    <img src="https://asset20.ckassets.com/resources/image/category/banking-finance-offers-4684-17455848681.png" alt="Credit Cards">
+                    <p>Credit Cards</p>
+                  </div>
+                  <div class="category">
+                    <img src="https://asset20.ckassets.com/resources/image/category/biggest-sales-5257-17352940050.png" alt="Biggest Sales">
+                    <p>Biggest Sales</p>
+                  </div>
+                  <div class="category">
+                    <img src="https://asset20.ckassets.com/resources/image/category/loans-offers-5376-17455651671.png" alt="Loans">
+                    <p>Loans</p>
+                  </div>
+                  <div class="category">
+                    <img src="https://asset20.ckassets.com/resources/image/category/fashion-offers-4199-17352129510.png" alt="Fashion">
+                    <p>Fashion</p>
+                  </div>
+                  <div class="category">
+                    <img src="https://asset20.ckassets.com/resources/image/category/health-medicine-offers-4203-17352130130.png" alt="Pharmacy">
+                    <p>Pharmacy</p>
+                  </div>
+                  <div class="category">
+                    <img src="https://asset20.ckassets.com/resources/image/category/mobiles-phones-offers-4200-17352851830.png" alt="Mobiles">
+                    <p>Mobiles</p>
+                  </div>
+                  <div class="category">
+                    <img src="https://asset20.ckassets.com/resources/image/category/electronics-offers-4205-17352127230.png" alt="Electronics">
+                    <p>Electronics</p>
+                  </div>
+                  <div class="category">
+                    <img src="https://asset20.ckassets.com/resources/image/category/new-on-ck-4908-17352852140.png" alt="New on CashKaro">
+                    <p>New on<br>CashKaro</p>
+                  </div>
+                </div>
+              </section>
+
+            <!-- Featured Products -->
+            <section class="products">
+                <div class="products-header">
+                    <h2>Featured Products</h2>
+                    <div class="sort-options">
+                        <select id="sort-by">
+                            <option value="default">Sort By</option>
+                            <option value="price-low">Price: Low to High</option>
+                            <option value="price-high">Price: High to Low</option>
+                            <option value="rating">Rating</option>
+                            <option value="newest">Newest</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="product-grid" id="product-grid">
+                    <!-- Products will be dynamically inserted here -->
+                </div>
+            </section>
+
+            <!-- Featured Today -->
+            <section class="products">
+                <div class="products-header">
+                  <h2>Featured Products</h2>
+                  <a href="#featured" class="view-all">View All</a>
+                </div>
+                <div class="product-grid" id="featured-grid">
+                  <!-- Featured Products will be dynamically inserted here -->
+                </div>
+            </section>
+
+            <!-- Trending Now -->
+            <section class="products">
+                <div class="products-header">
+                    <h2>Trending Now</h2>
+                    <a href="#trending" class="view-all" id="view-all-trending">View All</a>
+                </div>
+                <div class="product-grid" id="trending-grid">
+                    <!-- Trending products will be dynamically inserted here -->
+                </div>
+            </section>
+
+            <!-- Today's Deals -->
+            <section class="products">
+                <div class="products-header">
+                    <h2>Today's Deals</h2>
+                    <div class="deals-countdown">
+                        <span>Ends in:</span>
+                        <span id="countdown">23:59:59</span>
+                    </div>
+                </div>
+                <div class="product-grid" id="deals-grid">
+                    <!-- Deal products will be dynamically inserted here -->
+                </div>
+            </section>
+
+            <!-- Recommended For You -->
+            <section class="products">
+                <div class="products-header">
+                    <h2>Recommended For You</h2>
+                    <a href="#recommended" class="view-all" id="view-all-recommended">View All</a>
+                </div>
+                <div class="product-grid" id="recommended-grid">
+                    <!-- Recommended products will be dynamically inserted here -->
+                </div>
+            </section>
+        </section>
+    </main>
+
+    <!-- Product View Modal -->
+    <div id="productViewOverlay" class="product-view-overlay">
+        <div class="product-view-container">
+          <button id="closeProductView" class="close-product-view">&times;</button>
+          
+          <div class="product-view-content">
+            <div class="product-view-images">
+              <div class="main-image">
+                <img id="productViewMainImage" src="" alt="">
+              </div>
+              <div class="thumbnail-container">
+                <!-- Thumbnails will be added dynamically -->
+              </div>
+            </div>
+            
+            <div class="product-view-details">
+              <h1 id="productViewTitle"></h1>
+              <div class="product-view-rating">
+                <span id="productViewStars"></span>
+                <span id="productViewReviews"></span>
+                <span id="productViewStock" class="stock-status"></span>
+              </div>
+              
+              <div class="product-view-pricing">
+                <span id="productViewPrice" class="current-price"></span>
+                <span id="productViewOriginalPrice" class="original-price"></span>
+                <span id="productViewDiscount" class="discount-badge"></span>
+              </div>
+              
+              <div class="product-view-description">
+                <p id="productViewDescription"></p>
+              </div>
+              <div class="product-view-coupon">
+                <input type="text" id="couponCodeInput" placeholder="Enter coupon code">
+                <button id="applyCouponBtn">Apply</button>
+                <span id="couponMessage"></span>
+              </div>
+              
+              <div class="product-view-actions">
+                <button id="addToCartProductView" class="add-to-cart-btn">
+                  <i class="fas fa-shopping-cart"></i> Add to Cart
+                </button>
+                <button id="buyNowProductView" class="buy-now-btn">
+                  <i class="fas fa-bolt"></i> Buy Now
+                </button>
+              </div>
+                          
+              <div class="product-view-meta">
+                <div class="meta-item">
+                  <span class="meta-label">SKU:</span>
+                  <span id="productViewSKU" class="meta-value"></span>
+                </div>
+                <div class="meta-item">
+                  <span class="meta-label">Category:</span>
+                  <span id="productViewCategory" class="meta-value"></span>
+                </div>
+                <div class="meta-item">
+                  <span class="meta-label">Brand:</span>
+                  <span id="productViewBrand" class="meta-value"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    <!-- Shopping Cart Modal -->
+    <div class="cart-modal" id="cart-modal">
+        <div class="cart-content">
+            <div class="cart-header">
+                <h3>Your Cart</h3>
+                <span class="close-btn">&times;</span>
+            </div>
+            <div class="cart-items" id="cart-items">
+                <!-- Cart items will be dynamically inserted here -->
+            </div>
+            <div class="cart-summary">
+                <div class="summary-row">
+                    <span>Subtotal:</span>
+                    <span id="cart-subtotal">$0.00</span>
+                </div>
+                <div class="summary-row">
+                    <span>Shipping:</span>
+                    <span id="cart-shipping">$0.00</span>
+                </div>
+                <div class="summary-row total">
+                    <span>Total:</span>
+                    <span id="cart-total">$0.00</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-section">
+                <h4>ShopEasy</h4>
+                <p>Your one-stop shop for all your needs.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Products</a></li>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Customer Service</h4>
+                <ul>
+                    <li><a href="#">FAQ</a></li>
+                    <li><a href="#">Shipping Policy</a></li>
+                    <li><a href="#">Return Policy</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Connect With Us</h4>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-pinterest"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2023 ShopEasy. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js" defer></script>
+</body>
+</html>
