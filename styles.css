@@ -334,7 +334,7 @@ border-radius: 50%;
 
 @media (max-width: 768px) {
 .nav ul {
-  gap: 17.5px;
+  gap: 15px;
 }
 }
 
@@ -751,6 +751,7 @@ text-align: center;
 .share-btn {
   width: 40px;
   height: 40px;
+  font-size: 15px;
   color: #000;
   background-color: #f8f9fa;
   border-radius: 50%;
