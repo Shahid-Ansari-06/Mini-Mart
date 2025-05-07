@@ -1,4 +1,4 @@
-// Sample Product Data
+// Product Data
 const products = [
   {
       id: 1,
@@ -240,13 +240,12 @@ products.forEach(product => {
                 <h4 class="discount">${product.discount}</h4>
             </div>
             <div class="product-rating">
-                <span class="stars">${stars}</span>
-                <span class="rating-count">(${product.reviews})</span>
+                <span class="stars">${stars} <span class="rating-count"> (${product.reviews}) </span> </span>
+                <span class="free-delivery"> <i class="fas fa-shipping-fast"></i> Free Delivery </span>
             </div>
             <div class="product-actions">
-                <a href="${product.link}" class="buy-now-btn">Buy Now</a>
                 <button class="cart-icon-btn" data-id="${product.id}">
-                    <i class="fas fa-shopping-cart"></i>
+                    <i class="fas fa-shopping-cart"></i> &nbsp; Add to Cart
                 </button>
                 <button class="share-btn" data-id="${product.id}">
                     <i class="fas fa-share-alt"></i>
@@ -470,9 +469,6 @@ const overlay = document.getElementById('productViewOverlay');
 const closeBtn = document.getElementById('closeProductView');
 const addToCartBtn = document.getElementById('addToCartProductView');
 const buyNowBtn = document.getElementById('buyNowProductView');
-const minusBtn = document.querySelector('.quantity-btn.minus');
-const plusBtn = document.querySelector('.quantity-btn.plus');
-const quantityInput = document.querySelector('.quantity-input');
 
 // Close button
 closeBtn.addEventListener('click', () => {
@@ -990,7 +986,7 @@ function updateCart() {
 
       // Add click event to show product view
     cartItems.addEventListener('click', (e) => {
-      const cartItemElement = e.target.closest('.cart-item');
+      const cartItemElement = e.target.closest('.cart-items');
       if (cartItemElement) {
       const productId = parseInt(cartItemElement.querySelector('.quantity-btn.minus').getAttribute('data-id'));
       const product = products.find(p => p.id === productId);
