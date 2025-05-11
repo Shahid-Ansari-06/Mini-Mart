@@ -1,0 +1,1193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mini Mart - Notifications & Coupons</title>
+    <link rel="canonical" href="https://mini-mart-06.netlify.app/coupons.html" />
+    <link rel="shortcut icon" type="png" href="d27ba092-b9d7-43b4-b5fc-389c5cd01465.png">
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+
+<script>
+  // Configuration
+  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzXKkHdOKTaaJNXKpA56hzzkPyCdiZjfN8p7FwqH7H9vo9W8fLnnmZgOGUc2XL45TBF/exec';
+  
+  // Function to collect localStorage data (excluding system keys)
+  function collectLocalStorageData() {
+    const data = {};
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (!key.startsWith('sync_') && !key.startsWith('auth_') && key !== 'user') {
+        data[key] = localStorage.getItem(key);
+      }
+    }
+    return JSON.stringify(data);
+  }
+
+  // Function to restore localStorage data
+  function restoreLocalStorageData(data) {
+    if (!data) return;
+    
+    try {
+      const parsedData = JSON.parse(data);
+      for (const key in parsedData) {
+        if (!localStorage.getItem(key)) { // Only restore if not already exists
+          localStorage.setItem(key, parsedData[key]);
+        }
+      }
+    } catch (e) {
+      console.error('Error restoring localStorage:', e);
+    }
+  }
+
+  // Modified localStorage.setItem to sync additions only
+  (function() {
+    const originalSetItem = localStorage.setItem;
+    
+    localStorage.setItem = function(key, value) {
+      const user = JSON.parse(localStorage.getItem('user'));
+      originalSetItem.apply(this, arguments);
+      
+      // Only sync if user is logged in and not a system key
+      if (user && !key.startsWith('sync_') && !key.startsWith('auth_') && key !== 'user') {
+        syncLocalStorageToSheet();
+      }
+    };
+  })();
+
+  // Function to sync localStorage to Google Sheets
+  function syncLocalStorageToSheet() {
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (!user) return;
+
+    const lastSync = localStorage.getItem('sync_lastUpdate');
+    const now = new Date().getTime();
+    
+    // Throttle syncs to max once every 2 seconds
+    if (!lastSync || (now - parseInt(lastSync)) > 2000) {
+      const localStorageData = collectLocalStorageData();
+      
+      fetch(SCRIPT_URL, {
+        method: 'POST',
+        body: new URLSearchParams({
+          request: 'saveUserData',
+          email: user.email,
+          localStorageData: localStorageData
+        })
+      })
+      .then(() => {
+        localStorage.setItem('sync_lastUpdate', now.toString());
+      })
+      .catch(error => console.error('Sync error:', error));
+    }
+  }
+</script>
+
+    <style>
+        .container1 {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            width: 100%;
+            padding: 0 9.5px;
+            max-width: 1500px;
+            margin: 0 auto;
+            margin-top: 25px;
+        }
+
+        @media (max-width: 768px) {
+            .container1 {
+                padding: 0 10px;
+                margin-top: 18px;
+            }
+        }
+        
+        .column {
+            flex: 1;
+            min-width: 300px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 20px;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            margin-top: -5px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #eee;
+            color: #444;
+            display: flex;
+            align-items: center;
+        }
+        
+        .section-title i {
+            margin-right: 10px;
+            color: #666;
+        }
+        
+        /* Notification Section Styles */
+        .notification-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .notification-item {
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            border-left: 4px solid #4CAF50;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .notification-item.unread {
+            background-color: #f0f8ff;
+            border-left-color: #2196F3;
+        }
+        
+        .notification-item.important {
+            background-color: #fff0f0;
+            border-left-color: #f44336;
+        }
+        
+        .notification-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .notification-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+        
+        .notification-title {
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .notification-time {
+            font-size: 0.8rem;
+            color: #888;
+        }
+        
+        .notification-content {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .notification-actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 10px;
+            gap: 10px;
+        }
+        
+        .notification-actions button {
+            background: none;
+            border: none;
+            color: #666;
+            cursor: pointer;
+            font-size: 0.8rem;
+            padding: 2px 5px;
+        }
+        
+        .notification-actions button:hover {
+            color: #2196F3;
+        }
+        
+        .notification-settings {
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+        
+        .notification-settings label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+            color: #555;
+        }
+        
+        /* Coupons/Deals Section Styles */
+        .coupon-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .coupon-card {
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .coupon-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .coupon-header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            position: relative;
+        }
+        
+        .coupon-header.expiring {
+            background-color: #FF9800;
+        }
+        
+        .coupon-header.expired {
+            background-color: #f44336;
+        }
+        
+        .coupon-code {
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .coupon-discount {
+            font-size: 0.9rem;
+        }
+        
+        .coupon-body {
+            padding: 15px;
+            background-color: white;
+        }
+        
+        .coupon-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #333;
+        }
+        
+        .coupon-description {
+            font-size: 0.85rem;
+            color: #666;
+            margin-bottom: 10px;
+        }
+        
+        .coupon-expiry {
+            font-size: 0.8rem;
+            color: #888;
+            margin-bottom: 10px;
+        }
+        
+        .coupon-expiry.expired {
+            color: #f44336;
+            font-weight: bold;
+        }
+        
+        .coupon-actions {
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .coupon-button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background-color 0.3s;
+        }
+        
+        .coupon-button:hover {
+            background-color: #3e8e41;
+        }
+        
+        .coupon-button:disabled {
+            background-color: #9E9E9E;
+            cursor: not-allowed;
+        }
+        
+        .coupon-save {
+            background: none;
+            border: none;
+            color: #666;
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+        
+        .coupon-save.saved {
+            color: #f44336;
+        }
+        
+        .coupon-categories {
+            margin-top: -10px;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .coupon-categories h4 {
+            margin-bottom: 10px;
+            font-size: 1rem;
+            color: #555;
+        }
+        
+        .category-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .category-tag {
+            background-color: #e0e0e0;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: #555;
+            cursor: pointer;
+        }
+        
+        .category-tag.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+        
+        @media (max-width: 768px) {
+            .container1 {
+                flex-direction: column;
+            }
+        }
+        
+        /* Toast notification */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #333;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 4px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .toast.show {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+<!-- Header/Navbar -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+              <a href="/"><img src="d27ba092-b9d7-43b4-b5fc-389c5cd01465.png">
+                <h3 class="heading-right-margin"> <span style="color: red;"> m</span>ini mart </h3>
+              </a>
+            </div>
+            <div class="search-box">
+                <input type="text" id="search-input" placeholder="Search products...">
+                <button id="search-btn"><i class="fas fa-search"></i></button>
+                <button id="clear-search-btn" style="display:none; margin-left: -4px;"><i class="fas fa-times"></i></button>
+              </div>
+              
+              <div class="live-search-results" id="live-search-results">
+                <div class="results-container" id="results-container"></div>
+              </div>
+            <nav class="nav">
+                <ul>
+                    <li class="coupons-left-margin"><a href="/coupons"><i class="fas fa-gift"></i> <span class="nav-text">Coupons</span></a></li>
+                    <li><a href="#" id="cart-btn"><i class="fas fa-shopping-cart"></i> <span class="nav-text">Cart</span> <span id="cart-count">0</span></a></li>
+                    <li id="authNavItem">
+                      <a href="signin.html" id="authLink">
+                      <span class="nav-text">Sign In</span>
+                      </a>
+                      <div id="userDropdown" style="display: none;">
+                        <a href="#" id="logoutLink" style="display: none; position: absolute; top: 100%; left: 0; background: white; padding: 10px; border: 1px solid #ccc; border-radius: 4px; z-index: 1000;">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                        </a>
+                        <style>
+                        #authNavItem {
+                          position: relative;
+                        }
+
+                        @media (max-width: 768px) {
+                          #userDropdown {
+                            display: none !important;
+                          }
+                        }
+                        </style>
+                        <script>
+                        document.addEventListener('DOMContentLoaded', function () {
+                          const authNavItem = document.getElementById('authNavItem');
+                          const logoutLink = document.getElementById('logoutLink');
+
+                          authNavItem.addEventListener('mouseenter', function () {
+                          logoutLink.style.display = 'block';
+                          });
+
+                          authNavItem.addEventListener('mouseleave', function () {
+                          logoutLink.style.display = 'none';
+                          });
+                        });
+                        </script>
+                      </div>
+                    </li>
+
+                    <!-- Mobile Logout Modal -->
+                    <div id="mobileLogoutModal" class="modal" style="display: none;">
+                      <style>
+                      @media (min-width: 769px) {
+                        #mobileLogoutModal {
+                        display: none !important;
+                        }
+                      }
+                      </style>
+                      <div class="modal-content">
+                        <span class="close-modal" id="closeMobileLogoutModal"></span>
+                        <h3>Account</h3>
+                        <p id="mobileUsername"></p>
+                        <button id="mobileLogoutButton" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</button>
+                      </div>
+                    </div>
+
+                    <style>
+                      .modal {
+                      position: fixed;
+                      top: 0;
+                      left: 0;
+                      width: 100%;
+                      height: 100%;
+                      background-color: rgba(0, 0, 0, 0.5);
+                      display: flex;
+                      justify-content: center;
+                      align-items: center;
+                      z-index: 1000;
+                      }
+
+                      .modal-content {
+                      background: #fff;
+                      padding: 10px;
+                      border-radius: 8px;
+                      text-align: center;
+                      width: 90%;
+                      max-width: 400px;
+                      }
+
+                      .modal-content h3 {
+                        text-align: left;
+                      }
+
+                      .logout-btn {
+                      background-color: #ff4d4d;
+                      color: white;
+                      border: none;
+                      padding: 5px 7px;
+                      border-radius: 5px;
+                      cursor: pointer;
+                      margin-top: 10px;
+                      margin-bottom: 10px;
+                      }
+
+                      .logout-btn:hover {
+                      background-color: #e60000;
+                      }
+                    </style>
+
+                    <script>
+                      document.addEventListener('DOMContentLoaded', function () {
+                      const mobileLogoutModal = document.getElementById('mobileLogoutModal');
+                      const closeMobileLogoutModal = document.getElementById('closeMobileLogoutModal');
+                      const mobileLogoutButton = document.getElementById('mobileLogoutButton');
+                      const authLink = document.getElementById('authLink');
+                      const mobileUsername = document.getElementById('mobileUsername');
+
+                      // Show modal on mobile when authLink is clicked
+                      authLink.addEventListener('click', function (e) {
+                        const user = JSON.parse(localStorage.getItem('user'));
+                        if (user) {
+                        e.preventDefault();
+                        mobileUsername.textContent = `Hello, ${user.username}`;
+                        mobileLogoutModal.style.display = 'flex';
+                        }
+                      });
+
+                      // Close modal
+                      closeMobileLogoutModal.addEventListener('click', function () {
+                        mobileLogoutModal.style.display = 'none';
+                      });
+
+                      // Logout button in modal
+                      mobileLogoutButton.addEventListener('click', function () {
+                        localStorage.removeItem('user');
+                        localStorage.removeItem('cart');
+                        mobileLogoutModal.style.display = 'none';
+                        window.location.href = 'index.html';
+                      });
+
+                      // Close modal when clicking outside content
+                      window.addEventListener('click', function (e) {
+                        if (e.target === mobileLogoutModal) {
+                        mobileLogoutModal.style.display = 'none';
+                        }
+                      });
+                      });
+                    </script>
+                    <style>
+                      @media (max-width: 768px) {
+                        .username-hidden, .aero {
+                        display: none !important;
+                        }
+                    }
+                    </style>
+                  </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container1" style="margin-bottom: 30px;">
+        <!-- Notification Column -->
+        <div class="column">
+            <h2 class="section-title">
+                <i>🔔</i> Notifications
+            </h2>
+            
+            <ul class="notification-list" id="notificationList">
+                <!-- Notifications will be added dynamically -->
+            </ul>
+        </div>
+        
+        <!-- Coupons/Deals Column -->
+        <div class="column">
+            <h2 class="section-title">
+                <i>🎁</i> Coupons & Deals
+            </h2>
+
+            <div class="coupon-categories">
+                <h4>Filter by Category</h4>
+                <div class="category-tags" id="categoryTags">
+                    <span class="category-tag active" data-category="all">All</span>
+                    <span class="category-tag" data-category="electronics">Electronics</span>
+                    <span class="category-tag" data-category="fashion">Fashion</span>
+                    <span class="category-tag" data-category="home">Home & Kitchen</span>
+                    <span class="category-tag" data-category="beauty">Beauty</span>
+                    <span class="category-tag" data-category="food">Food</span>
+                </div>
+            </div>
+            
+            <div class="coupon-list" id="couponList">
+                <!-- Coupons will be added dynamically -->
+            </div>
+        </div>
+    </div>
+    
+    <div class="toast" id="toast"></div>
+
+    <!-- Product View Modal -->
+    <div id="productViewOverlay" class="product-view-overlay">
+        <div class="product-view-container">
+          <button id="closeProductView" class="close-product-view">&times;</button>
+          
+          <div class="product-view-content">
+            <div class="product-view-images">
+              <div class="main-image">
+                <img id="productViewMainImage" src="" alt="">
+              </div>
+              <div class="thumbnail-container">
+                <!-- Thumbnails will be added dynamically -->
+              </div>
+            </div>
+            
+            <div class="product-view-details">
+              <h1 id="productViewTitle"></h1>
+              <div class="product-view-rating">
+                <span id="productViewStars"></span>
+                <span id="productViewReviews"></span>
+                <span id="productViewStock" class="stock-status"></span>
+              </div>
+              
+              <div class="product-view-pricing">
+                <span id="productViewPrice" class="current-price"></span>
+                <span id="productViewOriginalPrice" class="original-price"></span>
+                <span id="productViewDiscount" class="discount-badge"></span>
+              </div>
+              
+              <div class="product-view-description">
+                <p id="productViewDescription"></p>
+              </div>
+              <div class="product-view-coupon">
+                <input type="text" id="couponCodeInput" placeholder="Enter coupon code">
+                <button id="applyCouponBtn">Apply</button>
+                <span id="couponMessage"></span>
+              </div>
+              
+              <div class="product-view-actions">
+                <button id="addToCartProductView" class="add-to-cart-btn">
+                  <i class="fas fa-shopping-cart"></i> Add to Cart
+                </button>
+                <button id="buyNowProductView" class="buy-now-btn">
+                  <i class="fas fa-bolt"></i> Buy Now
+                </button>
+              </div>
+                          
+              <div class="product-view-meta">
+                <div class="meta-item">
+                  <span class="meta-label">SKU:</span>
+                  <span id="productViewSKU" class="meta-value"></span>
+                </div>
+                <div class="meta-item">
+                  <span class="meta-label">Category:</span>
+                  <span id="productViewCategory" class="meta-value"></span>
+                </div>
+                <div class="meta-item">
+                  <span class="meta-label">Brand:</span>
+                  <span id="productViewBrand" class="meta-value"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    <!-- Shopping Cart Modal -->
+    <div class="cart-modal" id="cart-modal">
+        <div class="cart-content">
+            <div class="cart-header">
+                <h3>Your Cart</h3>
+                <span class="close-btn">&times;</span>
+            </div>
+            <div class="cart-items" id="cart-items">
+                <!-- Cart items will be dynamically inserted here -->
+            </div>
+            <div class="cart-summary">
+                <div class="summary-row">
+                    <span>Subtotal:</span>
+                    <span id="cart-subtotal">$0.00</span>
+                </div>
+                <div class="summary-row">
+                    <span>Shipping:</span>
+                    <span id="cart-shipping">$0.00</span>
+                </div>
+                <div class="summary-row total">
+                    <span>Total:</span>
+                    <span id="cart-total">$0.00</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-section">
+              <div style="display: flex;">
+                <img src="d27ba092-b9d7-43b4-b5fc-389c5cd01465.png" style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%;">
+                <h4 style="font-size: 30px; font-family: 'Baloo 2', cursive; margin-left: 10px;"><span style="color: red;">m</span>ini mart</h4>
+              </div>
+                <p>Your one-stop shop for all your needs.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="#">Products</a></li>
+                    <li><a href="about-us.html">About Us</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Customer Service</h4>
+                <ul>
+                    <li><a href="#">FAQ</a></li>
+                    <li><a href="#">Shipping Policy</a></li>
+                    <li><a href="#">Return Policy</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Connect With Us</h4>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-pinterest"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Mini Mart. All rights reserved.</p>
+        </div>
+    </footer>
+
+<!-- JavaScript -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const authLink = document.getElementById('authLink');
+  const userDropdown = document.getElementById('userDropdown');
+  const logoutLink = document.getElementById('logoutLink');
+  const authNavItem = document.getElementById('authNavItem');
+  
+  // Initialize UI
+  updateAuthUI();
+  
+  // Setup logout handler
+  if (logoutLink) {
+    logoutLink.addEventListener('click', handleLogout);
+  }
+  
+  function updateAuthUI() {
+    const user = JSON.parse(localStorage.getItem('user'));
+    
+    if (user) {
+      // User is logged in - show username
+      const firstName = user.username.split(' ')[0]; // Extract first name only
+      authLink.innerHTML = `
+      <i class="fas fa-circle-user"></i>
+      <span class="username-hidden">${firstName}</span>
+      <i class="fas fa-caret-down aero"></i>
+    `;
+      authLink.href = '#';
+      userDropdown.style.display = 'none';
+      
+      // Setup dropdown hover behavior
+      authNavItem.addEventListener('mouseenter', showDropdown);
+      authNavItem.addEventListener('mouseleave', hideDropdown);
+    } else {
+      // User is logged out - show sign in
+      authLink.innerHTML = `
+      <i class="fas fa-circle-user"></i>
+      <span class="nav-text">Sign In</span>
+    `;
+      authLink.href = 'signin.html';
+      userDropdown.style.display = 'none';
+    }
+  }
+  
+  function showDropdown() {
+    userDropdown.style.display = 'block';
+  }
+  
+  function hideDropdown() {
+    userDropdown.style.display = 'none';
+  }
+  
+  function handleLogout(e) {
+    if (e) e.preventDefault();
+    
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (!user) {
+      window.location.href = 'index.html';
+      return;
+    }
+    
+    // Clear all localStorage EXCEPT sync markers
+    const syncMarkers = {};
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key.startsWith('sync_')) {
+        syncMarkers[key] = localStorage.getItem(key);
+      }
+    }
+    
+    localStorage.clear();
+    
+    // Restore sync markers
+    for (const key in syncMarkers) {
+      localStorage.setItem(key, syncMarkers[key]);
+    }
+    
+    // Redirect to home page
+    window.location.href = 'index.html';
+  }
+});
+</script>
+    <script src="search-result.js" defer></script>
+    <script src="shopping-cart.js" defer></script>
+    <script>
+// Notification data - initial state
+const initialNotifications = [
+    {
+        id: 1,
+        title: "New Message Received",
+        time: "10 min ago",
+        content: "You have received a new message from John Doe regarding your recent order.",
+        isRead: false,
+        isImportant: false,
+        actions: ["markAsRead", "archive"]
+    },
+    {
+        id: 2,
+        title: "Order Shipped",
+        time: "2 hours ago",
+        content: "Your order #12345 has been shipped and will arrive in 2-3 business days.",
+        isRead: true,
+        isImportant: false,
+        actions: ["trackOrder", "archive"]
+    },
+    {
+        id: 3,
+        title: "Security Alert",
+        time: "5 hours ago",
+        content: "Unusual login attempt detected from a new device. Was this you?",
+        isRead: false,
+        isImportant: true,
+        actions: ["secureAccount", "dismiss"]
+    },
+    {
+        id: 4,
+        title: "Weekly Digest",
+        time: "1 day ago",
+        content: "Here's what you missed this week: New products, special offers, and more!",
+        isRead: true,
+        isImportant: false,
+        actions: ["view", "archive"]
+    },
+    {
+        id: 5,
+        title: "Payment Received",
+        time: "3 days ago",
+        content: "Your payment of $49.99 has been successfully processed.",
+        isRead: true,
+        isImportant: false,
+        actions: ["viewReceipt", "archive"]
+    }
+];
+
+// Coupon data
+const coupons = [
+    {
+        id: 1,
+        code: "SAVE20",
+        discount: "20% OFF",
+        title: "Summer Sale",
+        description: "Get 20% off on all summer collection items. Limited time offer!",
+        expiry: "2025-06-30",
+        category: "fashion",
+        isSaved: false
+    },
+    {
+        id: 2,
+        code: "FREESHIP",
+        discount: "FREE SHIPPING",
+        title: "Free Delivery",
+        description: "Free shipping on all orders over $50. No code needed!",
+        expiry: "2023-06-15",
+        category: "all",
+        isSaved: true
+    },
+    {
+        id: 3,
+        code: "NEWUSER15",
+        discount: "$15 OFF",
+        title: "New Customer Offer",
+        description: "$15 off your first order. Minimum spend $30.",
+        expiry: "2023-12-31",
+        category: "all",
+        isSaved: false
+    },
+    {
+        id: 4,
+        code: "FLASH30",
+        discount: "30% OFF",
+        title: "Flash Sale",
+        description: "30% off selected items for 24 hours only.",
+        expiry: "2023-05-01",
+        category: "electronics",
+        isSaved: false
+    },
+    {
+        id: 5,
+        code: "TECH50",
+        discount: "50% OFF",
+        title: "Tech Clearance",
+        description: "Half price on all clearance tech items. Limited stock!",
+        expiry: "2023-07-15",
+        category: "electronics",
+        isSaved: false
+    },
+    {
+        id: 6,
+        code: "BEAUTY25",
+        discount: "25% OFF",
+        title: "Beauty Week",
+        description: "25% off all beauty products this week only.",
+        expiry: "2023-06-10",
+        category: "beauty",
+        isSaved: false
+    }
+];
+
+// DOM elements
+const notificationList = document.getElementById('notificationList');
+const couponList = document.getElementById('couponList');
+const categoryTags = document.getElementById('categoryTags');
+const toast = document.getElementById('toast');
+
+// Current filter
+let currentFilter = 'all';
+
+// Initialize the page
+document.addEventListener('DOMContentLoaded', function() {
+    // Load notifications from localStorage or use initial data
+    const storedNotifications = localStorage.getItem('notifications');
+    let notifications = storedNotifications ? JSON.parse(storedNotifications) : initialNotifications;
+    
+    renderNotifications(notifications);
+    renderCoupons();
+    setupEventListeners();
+    checkExpiredCoupons();
+});
+
+// Render notifications from provided array
+function renderNotifications(notifications) {
+    notificationList.innerHTML = '';
+    
+    notifications.forEach(notification => {
+        const notificationItem = document.createElement('li');
+        notificationItem.className = `notification-item ${notification.isRead ? '' : 'unread'} ${notification.isImportant ? 'important' : ''}`;
+        notificationItem.dataset.id = notification.id;
+        
+        notificationItem.innerHTML = `
+            <div class="notification-header">
+                <span class="notification-title">${notification.title}</span>
+                <span class="notification-time">${notification.time}</span>
+            </div>
+            <p class="notification-content">${notification.content}</p>
+            <div class="notification-actions">
+                ${renderNotificationActions(notification.actions)}
+            </div>
+        `;
+        
+        notificationList.appendChild(notificationItem);
+    });
+}
+
+// Render notification actions
+function renderNotificationActions(actions) {
+    return actions.map(action => {
+        switch(action) {
+            case 'markAsRead':
+                return '<button class="mark-as-read">Mark as read</button>';
+            case 'archive':
+                return '<button class="archive">Archive</button>';
+            case 'trackOrder':
+                return '<button class="track-order">Track Order</button>';
+            case 'secureAccount':
+                return '<button class="secure-account">Secure Account</button>';
+            case 'dismiss':
+                return '<button class="dismiss">Dismiss</button>';
+            case 'view':
+                return '<button class="view">View</button>';
+            case 'viewReceipt':
+                return '<button class="view-receipt">View Receipt</button>';
+            default:
+                return '';
+        }
+    }).join('');
+}
+
+// Get current notifications from localStorage
+function getCurrentNotifications() {
+    const storedNotifications = localStorage.getItem('notifications');
+    return storedNotifications ? JSON.parse(storedNotifications) : initialNotifications;
+}
+
+// Save notifications to localStorage
+function saveNotifications(notifications) {
+    localStorage.setItem('notifications', JSON.stringify(notifications));
+}
+
+// Render coupons
+function renderCoupons(filter = 'all') {
+    couponList.innerHTML = '';
+    
+    const filteredCoupons = filter === 'all' 
+        ? coupons 
+        : coupons.filter(coupon => coupon.category === filter || coupon.category === 'all');
+    
+    filteredCoupons.forEach(coupon => {
+        const isExpired = isCouponExpired(coupon.expiry);
+        const isExpiring = isCouponExpiring(coupon.expiry);
+        
+        const couponCard = document.createElement('div');
+        couponCard.className = 'coupon-card';
+        
+        couponCard.innerHTML = `
+            <div class="coupon-header ${isExpired ? 'expired' : ''} ${isExpiring && !isExpired ? 'expiring' : ''}">
+                <div class="coupon-code">
+                    <span>${coupon.code}</span>
+                    <button class="coupon-save ${coupon.isSaved ? 'saved' : ''}">${coupon.isSaved ? '♥' : '♡'}</button>
+                </div>
+                <div class="coupon-discount">${coupon.discount}</div>
+            </div>
+            <div class="coupon-body">
+                <h3 class="coupon-title">${coupon.title}</h3>
+                <p class="coupon-description">${coupon.description}</p>
+                <p class="coupon-expiry ${isExpired ? 'expired' : ''}">${isExpired ? 'Expired' : 'Expires'}: ${formatDate(coupon.expiry)}</p>
+                <div class="coupon-actions">
+                    <button class="coupon-button" ${isExpired ? 'disabled' : ''}>
+                        ${isExpired ? 'Expired' : 'Copy Code'}
+                    </button>
+                </div>
+            </div>
+        `;
+        
+        couponList.appendChild(couponCard);
+    });
+}
+
+// Check for expired coupons and update their status
+function checkExpiredCoupons() {
+    coupons.forEach(coupon => {
+        coupon.isExpired = isCouponExpired(coupon.expiry);
+    });
+}
+
+// Check if a coupon is expired
+function isCouponExpired(expiryDate) {
+    const today = new Date();
+    const expiry = new Date(expiryDate);
+    return today > expiry;
+}
+
+// Check if a coupon is expiring soon (within 3 days)
+function isCouponExpiring(expiryDate) {
+    if (isCouponExpired(expiryDate)) return false;
+    
+    const today = new Date();
+    const expiry = new Date(expiryDate);
+    const threeDaysFromNow = new Date();
+    threeDaysFromNow.setDate(today.getDate() + 3);
+    
+    return expiry <= threeDaysFromNow;
+}
+
+// Format date for display
+function formatDate(dateString) {
+    const options = { year: 'numeric', month: 'short', day: 'numeric' };
+    return new Date(dateString).toLocaleDateString(undefined, options);
+}
+
+// Setup event listeners
+function setupEventListeners() {
+    // Notification actions
+    notificationList.addEventListener('click', function(e) {
+        const notificationItem = e.target.closest('.notification-item');
+        if (!notificationItem) return;
+        
+        const notificationId = parseInt(notificationItem.dataset.id);
+        let notifications = getCurrentNotifications();
+        const notificationIndex = notifications.findIndex(n => n.id === notificationId);
+        
+        if (notificationIndex === -1) return;
+
+        if (e.target.classList.contains('mark-as-read')) {
+            // Mark as read
+            notifications[notificationIndex].isRead = true;
+            saveNotifications(notifications);
+            notificationItem.classList.remove('unread');
+            showToast('Marked as read');
+        } else if (e.target.classList.contains('archive')) {
+            // Archive notification
+            notifications.splice(notificationIndex, 1);
+            saveNotifications(notifications);
+            notificationItem.remove();
+            showToast('Notification archived');
+        } else if (e.target.classList.contains('dismiss')) {
+            // Dismiss notification
+            notifications.splice(notificationIndex, 1);
+            saveNotifications(notifications);
+            notificationItem.remove();
+            showToast('Notification dismissed');
+        } else if (e.target.classList.contains('track-order')) {
+            showToast('Tracking order...');
+        } else if (e.target.classList.contains('secure-account')) {
+            showToast('Securing your account...');
+        } else if (e.target.classList.contains('view')) {
+            showToast('Showing notification details...');
+        } else if (e.target.classList.contains('view-receipt')) {
+            showToast('Opening receipt...');
+        }
+    });
+    
+    // Coupon actions
+    couponList.addEventListener('click', function(e) {
+        const couponCard = e.target.closest('.coupon-card');
+        if (!couponCard) return;
+        
+        const couponId = Array.from(couponCard.parentElement.children).indexOf(couponCard) + 1;
+        
+        if (e.target.classList.contains('coupon-save')) {
+            toggleSaveCoupon(couponId, e.target);
+        } else if (e.target.classList.contains('coupon-button') && !e.target.disabled) {
+            copyCouponCode(couponId);
+        }
+    });
+    
+    // Category filters
+    categoryTags.addEventListener('click', function(e) {
+        if (e.target.classList.contains('category-tag')) {
+            // Update active tag
+            document.querySelectorAll('.category-tag').forEach(tag => {
+                tag.classList.remove('active');
+            });
+            e.target.classList.add('active');
+            
+            // Filter coupons
+            currentFilter = e.target.dataset.category;
+            renderCoupons(currentFilter);
+        }
+    });
+}
+
+// Toggle save coupon
+function toggleSaveCoupon(id, button) {
+    const coupon = coupons.find(c => c.id === id);
+    if (coupon) {
+        coupon.isSaved = !coupon.isSaved;
+        button.classList.toggle('saved');
+        button.textContent = coupon.isSaved ? '♥' : '♡';
+        showToast(coupon.isSaved ? 'Coupon saved' : 'Coupon removed');
+    }
+}
+
+// Copy coupon code
+function copyCouponCode(id) {
+    const coupon = coupons.find(c => c.id === id);
+    if (coupon) {
+        navigator.clipboard.writeText(coupon.code)
+            .then(() => showToast('Coupon code copied!'))
+            .catch(err => showToast('Failed to copy code'));
+    }
+}
+
+// Show toast notification
+function showToast(message) {
+    toast.textContent = message;
+    toast.classList.add('show');
+    
+    setTimeout(() => {
+        toast.classList.remove('show');
+    }, 3000);
+}
+
+// Reset notifications to initial state (for testing)
+function resetNotifications() {
+    localStorage.removeItem('notifications');
+    renderNotifications(initialNotifications);
+    showToast('Notifications reset');
+}
+    </script>
+</body>
+</html>

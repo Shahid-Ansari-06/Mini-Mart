@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mini Mart - Sign In</title>
+    <link rel="canonical" href="https://mini-mart-06.netlify.app/signin.html" />
+    <link rel="shortcut icon" type="png" href="d27ba092-b9d7-43b4-b5fc-389c5cd01465.png">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(120deg, white 50%, black 50%);
+        }
+        .auth-container {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 78.5%;
+            max-width: 400px;
+            padding: 30px;
+        }
+        .auth-form h2 {
+            margin-top: 0;
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: bold;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #000;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #191919;
+        }
+        .auth-form p {
+            text-align: center;
+            margin-top: 20px;
+            margin-bottom: -10px;
+        }
+        .auth-form a {
+            color: #4285f4;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .auth-form a:hover {
+            text-decoration: underline;
+        }
+        .error-message {
+            color: #d32f2f;
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-form">
+            <h2><span style="color: red;">S</span>ign In</h2>
+            <form id="signinForm">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div style="position: relative;">
+                        <input type="password" id="password" name="password" required style="padding-right: 40px;">
+                        <span id="togglePassword" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer; font-size: 1.3em;">
+                            👁️
+                        </span>
+                    </div>
+                    <script>
+                        const passwordInput = document.getElementById('password');
+                        const togglePassword = document.getElementById('togglePassword');
+
+                        togglePassword.addEventListener('click', () => {
+                            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                            passwordInput.setAttribute('type', type);
+                            togglePassword.textContent = type === 'password' ? '👁️' : '🙈';
+                        });
+                    </script>
+                </div>
+                <button type="submit">Sign In</button>
+            </form>
+            <div id="errorMessage" class="error-message"></div>
+            <p>Don't have an account? <a href="signup.html">Sign Up</a></p>
+        </div>
+    </div>
+
+    <script>
+        // Configuration
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzXKkHdOKTaaJNXKpA56hzzkPyCdiZjfN8p7FwqH7H9vo9W8fLnnmZgOGUc2XL45TBF/exec';
+        const errorElement = document.getElementById('errorMessage');
+
+        // Form submission handler
+        document.getElementById('signinForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // Clear previous errors
+            errorElement.textContent = '';
+            
+            // Get form values
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            
+            // Simple validation
+            if (!email || !password) {
+                showError('Please fill in all fields');
+                return;
+            }
+            
+            try {
+                // Show loading state
+                const submitBtn = e.target.querySelector('button[type="submit"]');
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Signing in...';
+                
+                // Send data to Google Apps Script
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: new URLSearchParams({
+                        request: 'signin',
+                        email: email,
+                        password: password
+                    })
+                });
+                
+                // Check if response is OK
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    // Store user data and redirect
+                    localStorage.setItem('user', JSON.stringify(data.user));
+                    
+                    // Restore any saved localStorage data
+                    if (data.localStorageData) {
+                        try {
+                            const savedData = JSON.parse(data.localStorageData);
+                            Object.keys(savedData).forEach(key => {
+                                if (!localStorage.getItem(key)) {
+                                    localStorage.setItem(key, savedData[key]);
+                                }
+                            });
+                        } catch (e) {
+                            console.error('Error restoring data:', e);
+                        }
+                    }
+                    
+                    window.location.href = 'index.html';
+                } else {
+                    showError(data.message || 'Invalid email or password');
+                }
+            } catch (error) {
+                console.error('Signin error:', error);
+                showError('Failed to sign in. Please check your connection and try again.');
+            } finally {
+                // Reset button state
+                const submitBtn = e.target.querySelector('button[type="submit"]');
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Sign In';
+            }
+        });
+        
+        function showError(message) {
+            errorElement.textContent = message;
+        }
+    </script>
+</body>
+</html>
