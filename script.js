@@ -514,15 +514,23 @@ const applyCouponBtn = document.getElementById('applyCouponBtn');
 const couponCodeInput = document.getElementById('couponCodeInput');
 const couponMessage = document.getElementById('couponMessage');
 
+// Define available coupons
+const coupons = {
+  'SHAHID06': 0.5, // 50% discount
+  'SAVE10': 0.1,   // 10% discount
+  'WELCOME20': 0.2 // 20% discount
+};
+
 applyCouponBtn.addEventListener('click', () => {
-  const couponCode = couponCodeInput.value.trim();
+  const couponCode = couponCodeInput.value.trim().toUpperCase();
   
-  if (couponCode === 'SHAHID06') {
-    // Apply 50% discount
-    product.price = product.originalPriceForCoupon * 0.5;
-    product.currentDiscount = 0.5;
+  if (coupons[couponCode] !== undefined) {
+    // Apply discount based on coupon
+    const discount = coupons[couponCode];
+    product.price = product.originalPriceForCoupon * (1 - discount);
+    product.currentDiscount = discount;
     updatePriceDisplay(product.price, product.originalPriceForCoupon);
-    couponMessage.textContent = '50% discount applied!';
+    couponMessage.textContent = `${(discount * 100).toFixed(0)}% discount applied!`;
     couponMessage.className = 'success';
   } else if (couponCode === '') {
     couponMessage.textContent = 'Please enter a coupon code';
@@ -534,6 +542,13 @@ applyCouponBtn.addEventListener('click', () => {
     updatePriceDisplay(product.price, product.originalPriceForCoupon);
     couponMessage.textContent = 'Invalid coupon code';
     couponMessage.className = 'error';
+  }
+});
+
+// Allow pressing Enter to apply coupon
+couponCodeInput.addEventListener('keypress', (e) => {
+  if (e.key === 'Enter') {
+    applyCouponBtn.click();
   }
 });
 
