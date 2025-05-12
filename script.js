@@ -168,7 +168,7 @@ const products = [
       category: "home",
       featured: false,
       trending: true,
-      deal: false,
+      deal: true,
       link: "#"
   },
   {
@@ -182,7 +182,7 @@ const products = [
       category: "beauty",
       featured: false,
       trending: true,
-      deal: false,
+      deal: true,
       link: "#"
   }
 ];
@@ -324,7 +324,8 @@ function displayAllTrendingProducts() {
 // Display Deal Products
 function displayDealProducts() {
   const dealProducts = products.filter(product => product.deal);
-  displayProducts(dealProducts.slice(0, 5), dealsGrid);
+  const shuffledDeals = dealProducts.sort(() => 0.5 - Math.random());
+  displayProducts(shuffledDeals.slice(0, 5), dealsGrid);
 }
 
 // Display Recommended Products
@@ -931,7 +932,7 @@ document.querySelectorAll('.view-all-results').forEach(btn => {
     liveResults.style.display = 'none';
 
     // Scroll to products
-    document.querySelector('.products-container').scrollIntoView({
+    document.querySelector('.search-result-container').scrollIntoView({
       behavior: 'smooth'
     });
   });
@@ -1154,16 +1155,6 @@ function init() {
   
   cartBtn.addEventListener('click', openCartModal);
   closeBtn.addEventListener('click', closeCartModal);
-              
-  viewAllTrending.addEventListener('click', (e) => {
-      e.preventDefault();
-      displayAllTrendingProducts();
-  });
-  
-  viewAllRecommended.addEventListener('click', (e) => {
-      e.preventDefault();
-      displayAllRecommendedProducts();
-  });
   
   // Close modals when clicking outside
   window.addEventListener('click', (e) => {
