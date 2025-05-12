@@ -346,7 +346,8 @@
                       const user = JSON.parse(localStorage.getItem('user'));
                       const textForUser = document.getElementById('textForUser');
                       if (user) {
-                        textForUser.textContent = `${user.username}! You May Like...`;
+                        const firstName = user.username.split(' ')[0];
+                        textForUser.textContent = `${firstName}! You May Like...`;
                       }
                       });
                     </script>
