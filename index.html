@@ -289,11 +289,11 @@
                 <h2>Top Categories</h2>
                 <div class="categories">
                   <div class="category">
-                    <img src="https://images.meesho.com/images/marketing/1744634654837.webp">
+                    <img src="https://asset20.ckassets.com/resources/image/category/banking-finance-offers-4684-17455848681.png">
                     <p>Credit Cards</p>
                   </div>
                   <div class="category">
-                    <img src="https://images.meesho.com/images/marketing/1744634780426.webp">
+                    <img src="https://asset20.ckassets.com/resources/image/category/biggest-sales-5257-17352940050.png">
                     <p>Biggest Sales</p>
                   </div>
                   <div class="category">
@@ -323,47 +323,6 @@
                 </div>
               </section>
 
-            <!-- Featured Products -->
-            <section class="products">
-                <div class="products-header">
-                    <h2>Featured Products</h2>
-                    <div class="sort-options">
-                        <select id="sort-by">
-                            <option value="default">Sort By</option>
-                            <option value="price-low">Price: Low to High</option>
-                            <option value="price-high">Price: High to Low</option>
-                            <option value="rating">Rating</option>
-                            <option value="newest">Newest</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="product-grid" id="product-grid">
-                    <!-- Products will be dynamically inserted here -->
-                </div>
-            </section>
-
-            <!-- Featured Today -->
-            <section class="products">
-                <div class="products-header">
-                  <h2>Featured Products</h2>
-                  <a href="#featured" class="view-all">View All</a>
-                </div>
-                <div class="product-grid" id="featured-grid">
-                  <!-- Featured Products will be dynamically inserted here -->
-                </div>
-            </section>
-
-            <!-- Trending Now -->
-            <section class="products">
-                <div class="products-header">
-                    <h2>Trending Now</h2>
-                    <a href="#trending" class="view-all" id="view-all-trending">View All</a>
-                </div>
-                <div class="product-grid" id="trending-grid">
-                    <!-- Trending products will be dynamically inserted here -->
-                </div>
-            </section>
-
             <!-- Today's Deals -->
             <section class="products">
                 <div class="products-header">
@@ -381,11 +340,58 @@
             <!-- Recommended For You -->
             <section class="products">
                 <div class="products-header">
-                    <h2>Recommended For You</h2>
-                    <a href="#recommended" class="view-all" id="view-all-recommended">View All</a>
+                    <h2 id="textForUser">Recommended For You</h2>
+                     <script>
+                      document.addEventListener('DOMContentLoaded', function() {
+                      const user = JSON.parse(localStorage.getItem('user'));
+                      const textForUser = document.getElementById('textForUser');
+                      if (user) {
+                        textForUser.textContent = `${user.username}! You May Like...`;
+                      }
+                      });
+                    </script>
                 </div>
                 <div class="product-grid" id="recommended-grid">
                     <!-- Recommended products will be dynamically inserted here -->
+                </div>
+            </section>
+
+            <!-- Featured on mini mart -->
+            <section class="products">
+                <div class="products-header">
+                  <h2>Featured on <span style="color: red; font-family: 'Baloo 2', cursive;">m</span><span style="font-family: 'Baloo 2', cursive;">ini mart</span></h2>
+                </div>
+                <div class="product-grid" id="featured-grid">
+                  <!-- Featured Products will be dynamically inserted here -->
+                </div>
+            </section>
+
+            <!-- People Also Viewed / Trending Now -->
+            <section class="products">
+                <div class="products-header">
+                    <h2>People also viewed</h2>
+                </div>
+                <div class="product-grid" id="trending-grid">
+                    <!-- Trending products will be dynamically inserted here -->
+                </div>
+            </section>
+
+            <!-- Featured Products -->
+            <section class="products search-result-container" id="products-footer">
+                <div class="products-header">
+                    <h2>Featured Products</h2>
+                    <div class="sort-options">
+                        <select id="sort-by">
+                            <option value="default">Sort By</option>
+                            <option value="price-low">Price: Low to High</option>
+                            <option value="price-high">Price: High to Low</option>
+                            <option value="rating">Rating</option>
+                            <option value="newest">Newest</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="product-grid" id="product-grid">
+                    <!-- Products will be dynamically inserted here -->
                 </div>
             </section>
         </section>
@@ -498,7 +504,7 @@
                 <h4>Quick Links</h4>
                 <ul>
                     <li><a href="/">Home</a></li>
-                    <li><a href="#">Products</a></li>
+                    <li><a href="#products-footer">Products</a></li>
                     <li><a href="/about-us">About Us</a></li>
                     <li><a href="#">Contact</a></li>
                 </ul>
