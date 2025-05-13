@@ -324,7 +324,7 @@
               </section>
 
             <!-- Today's Deals -->
-            <section class="products deals-none">
+            <section class="products display-none">
                 <div class="products-header">
                     <h2>Today's Deals</h2>
                     <div class="deals-countdown">
@@ -339,7 +339,7 @@
 
             <!-- New Arrivals -->
             <div class="new-product-card">
-             <h2 style="font-size: 25px;">New on <span style="font-family: 'Baloo 2', cursive;"><span style="color: red;">m</span>ini mart </span></h2>
+             <h2 style="font-size: 24px;">New on <span style="font-family: 'Baloo 2', cursive;"><span style="color: red;">m</span>ini mart </span></h2>
               <div class="new-products">
                <div class="new-product">
                 <img src="assets/61TapeOXotL._SL1500_.jpg.webp"/>
@@ -371,12 +371,12 @@
                 <p>Laptop Accessories</p>
                 <span>From ₹299</span>
               </div>
-              <div class="new-product">
+              <div class="new-product display-none1">
                 <img src="assets/419Y3JNfW6L._SR290,290_.jpg"/>
                 <p>Gaming Mice</p>
                 <span>From ₹99</span>
               </div>
-              <div class="new-product">
+              <div class="new-product display-none1">
                 <img src="assets/images (1).jpeg"/>
                 <p>Bluetooth Speakers</p>
                 <span>From ₹499</span>
@@ -384,24 +384,42 @@
             </div>
           </div>
 
-            <!-- Recommended For You -->
-            <section class="products">
+            <!-- Recommended For You / Only For Desktop & Tablets -->
+            <section class="products display-none">
                 <div class="products-header">
                     <h2 id="textForUser">Recommended For You</h2>
-                     <script>
-                      document.addEventListener('DOMContentLoaded', function() {
+                    <script>
+                    document.addEventListener('DOMContentLoaded', function() {
                       const user = JSON.parse(localStorage.getItem('user'));
                       const textForUser = document.getElementById('textForUser');
                       if (user) {
                         const firstName = user.username.split(' ')[0];
                         textForUser.textContent = `${firstName}! You May Like...`;
-                      }
-                      });
+                       }
+                       });
                     </script>
                 </div>
                 <div class="product-grid" id="recommended-grid">
                     <!-- Recommended products will be dynamically inserted here -->
                 </div>
+            </section>
+
+            <!-- Suggested For You / Only For Mobiles -->
+            <section class="suggested-products display-none1">
+             <h2 id="textForUser1">Suggested For You</h2>
+            <script>
+            document.addEventListener('DOMContentLoaded', function() {
+              const user = JSON.parse(localStorage.getItem('user'));
+              const textForUser1 = document.getElementById('textForUser1');
+              if (user) {
+                const firstName = user.username.split(' ')[0];
+                textForUser1.textContent = `${firstName}! You May Like...`;
+              }
+            });
+            </script>
+             <div class="suggested-products-list" id="suggested-grid">
+              <!-- Suggested products wiil be dynamically inserted here -->
+             </div>
             </section>
 
             <!-- Featured on mini mart -->
