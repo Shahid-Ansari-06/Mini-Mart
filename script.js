@@ -361,7 +361,7 @@ function displaySuggestedProducts() {
       <div class="suggested-product-info">
         <h3 class="product-title">${product.title}</h3>
         <div class="suggested-product-price">
-          <span class="current-price">$${Number(product.price || 0).toFixed(2)}</span>
+          <span class="suggested-current-price">$${Number(product.price || 0).toFixed(2)}</span>
           ${product.originalPrice ? `<span class="original-price">$${Number(product.originalPrice).toFixed(2)}</span>` : ''}
         </div>
       </div>
