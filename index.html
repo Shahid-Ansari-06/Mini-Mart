@@ -96,7 +96,44 @@
               </a>
             </div>
             <div class="search-box">
-                <input type="text" id="search-input" placeholder="Search products...">
+                <input type="text" id="search-input" placeholder="Search for products..." onfocus="startTypewriterEffect()">
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                    startTypewriterEffect();
+                    });
+
+                    function startTypewriterEffect() {
+                  const input = document.getElementById('search-input');
+                  const phrases = ["Search for products...", "Find the best offers...", "Explore new arrivals...", "Discover trending items...", "Search for deals..."];
+                  let i = 0;
+                  let j = 0;
+                  let currentPhrase = '';
+                  let isDeleting = false;
+
+                  function type() {
+                    if (isDeleting) {
+                    currentPhrase = phrases[i].substring(0, j--);
+                    } else {
+                    currentPhrase = phrases[i].substring(0, j++);
+                    }
+
+                    input.placeholder = currentPhrase;
+
+                    if (!isDeleting && j === phrases[i].length) {
+                    isDeleting = true;
+                    setTimeout(type, 1000); // Pause before deleting
+                    } else if (isDeleting && j === 0) {
+                    isDeleting = false;
+                    i = (i + 1) % phrases.length; // Move to the next phrase
+                    setTimeout(type, 500); // Pause before typing the next phrase
+                    } else {
+                    setTimeout(type, isDeleting ? 50 : 100);
+                    }
+                  }
+
+                  type();
+                  }
+                </script>
                 <button id="search-btn"><i class="fas fa-search"></i></button>
                 <button id="clear-search-btn" style="display:none; margin-left: -4px;"><i class="fas fa-times"></i></button>
               </div>
