@@ -344,6 +344,42 @@ function displayAllRecommendedProducts() {
   searchResults.style.display = 'none';
 }
 
+// Display Suggested Products
+function displaySuggestedProducts() {
+  const suggestedProducts = [...products].sort(() => 0.5 - Math.random()).slice(0, 5);
+  const suggestedGrid = document.getElementById('suggested-grid');
+  suggestedGrid.innerHTML = '';
+
+  suggestedProducts.forEach(product => {
+    const productCard = document.createElement('div');
+    productCard.className = 'suggested-product-card';
+    productCard.innerHTML = `
+      <div class="suggested-product-image">
+        <img src="${product.image}" alt="${product.title}" loading="lazy">
+        ${product.badge ? `<span class="product-badge">${product.badge}</span>` : ''}
+      </div>
+      <div class="suggested-product-info">
+        <h3 class="product-title">${product.title}</h3>
+        <div class="suggested-product-price">
+          <span class="current-price">$${Number(product.price || 0).toFixed(2)}</span>
+          ${product.originalPrice ? `<span class="original-price">$${Number(product.originalPrice).toFixed(2)}</span>` : ''}
+        </div>
+      </div>
+    `;
+
+    // Add click event to open product modal
+    productCard.addEventListener('click', () => {
+      showProductView(product);
+    });
+
+    suggestedGrid.appendChild(productCard);
+  });
+}
+
+// Call the function to display suggested products
+displaySuggestedProducts();
+
+
 // Sort Products
 function sortProducts() {
   const sortOption = sortBy.value;
