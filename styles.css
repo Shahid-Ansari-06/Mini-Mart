@@ -507,6 +507,7 @@ text-align: left;
   padding: 0px;
   margin-top: 10px;
   margin-bottom: 0px;
+  overflow-x: hidden;
 }
 
 .top-categories h2 {
