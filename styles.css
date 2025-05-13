@@ -597,9 +597,21 @@ text-align: center;
   }
 }
 
+/* Sponsored Card Styling */
+.sponsored-card {
+  width: 100%;
+  padding: 2px;
+  margin-top: -5px;
+}
+
+.sponsored-card img {
+  width: 100%;
+  border-radius: 10px;
+}
+
 /* Suggested Products Styles */
 .suggested-products {
-  background: #fff;
+  background: #D7F2E9;
   padding: 20px;
   border-radius: 10px;
   max-width: 100%;
@@ -610,6 +622,7 @@ text-align: center;
 }
 
 .suggested-products h2 {
+  font-size: 24px;
   margin-bottom: 14px;
   color: var(--dark-color);
   margin-top: -2px;
@@ -639,7 +652,12 @@ text-align: center;
 
 .suggested-product-price {
   margin-top: -10px;
-  margin-bottom: -7px;
+  margin-bottom: -5px;
+}
+
+.suggested-current-price {
+  font-size: 15px;
+  font-weight: bold;
 }
 
 .suggested-products-list::-webkit-scrollbar {
@@ -648,7 +666,7 @@ text-align: center;
 
 .suggested-product-card {
   min-width: 175px;
-  background-color: #fff;
+  background-color: #D7F2E9;
   border-radius: 10px;
 }
 
