@@ -17,7 +17,6 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  overflow-x: hidden;
 }
 
 body {
@@ -600,7 +599,7 @@ text-align: center;
 /* Sponsored Card Styling */
 .sponsored-card {
   width: 100%;
-  padding: 2px;
+  padding: 0px;
   margin-top: -5px;
 }
 
