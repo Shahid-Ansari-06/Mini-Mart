@@ -1,191 +1,52 @@
-// Product Data
-const products = [
-  {
+// Fetch products
+async function fetchProducts() {
+  try {
+    const scriptUrl = 'https://script.google.com/macros/s/AKfycbzafv3PZvWjYzBoT3e-5WoqTK5Q2FZ-nWecpAPgtqUM7dkF-lrJz7ChLKdfhesXXc6v/exec';
+    const response = await fetch(scriptUrl);
+    const products = await response.json();
+    return products;
+  } catch (error) {
+    console.error('Error loading products:', error);
+    // Fallback to local products if API fails
+    return [{
       id: 1,
       title: "Wireless Bluetooth Headphones",
       description: "Detailed product description goes here. This could include features, specifications, and other details about the product.",
       price: 99.99,
       originalPrice: 129.99,
-      discount: "25% off",
+      discount: "25",
       image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8aGVhZHBob25lc3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60",
-      additionalImages:[
+      additionalImages: [
         "https://images.unsplash.com/photo-1523275335684-37898b6baf30?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8c21hcnQlMjB3YXRjaHxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60"
       ],
       rating: 4.5,
       reviews: 125,
       inStock: true,
-      sku : 'SP001',
+      sku: '',
       brand: 'Boat',
       badge: "Popular",
-      category: "electronics",
+      category: "Electronics",
       featured: true,
-      trending: false,
-      deal: false,
+      trending: true,
+      deal: true,
       link: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8c21hcnQlMjB3YXRjaHxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60"
-  },
-  {
-      id: 2,
-      title: "Smart Watch with Fitness Tracker",
-      price: 149.99,
-      originalPrice: 199.99,
-      discount: "25% off",
-      image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8c21hcnQlMjB3YXRjaHxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60",
-      rating: 4.2,
-      reviews: 89,
-      badge: "Sale",
-      category: "electronics",
-      featured: true,
-      trending: false,
-      deal: false,
-      link: "#"
-  },
-  {
-      id: 3,
-      title: "Portable Bluetooth Speaker",
-      price: 59.99,
-      discount: "25% off",
-      image: "https://images.unsplash.com/photo-1572569511254-d8f925fe2cbb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8Ymx1ZXRvb3RoJTIwc3BlYWtlcnxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60",
-      rating: 4.7,
-      reviews: 210,
-      category: "electronics",
-      featured: true,
-      trending: false,
-      deal: false,
-      link: "#"
-  },
-  {
-      id: 4,
-      title: "4K Ultra HD Smart TV",
-      price: 699.99,
-      originalPrice: 899.99,
-      discount: "25% off",
-      image: "https://images.unsplash.com/photo-1593784991095-a205069470b6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8dHZ8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60",
-      rating: 4.8,
-      reviews: 56,
-      badge: "Best Seller",
-      category: "electronics",
-      featured: false,
-      trending: true,
-      deal: false,
-      link: "#"
-  },
-  {
-      id: 5,
-      title: "Laptop Backpack with USB Charging Port",
-      price: 39.99,
-      discount: "25% off",
-      image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fGJhY2twYWNrfGVufDB8fDB8fHww&auto=format&fit=crop&w=500&q=60",
-      rating: 4.3,
-      reviews: 178,
-      category: "electronics",
-      featured: false,
-      trending: false,
-      deal: true,
-      link: "#"
-  },
-  {
-      id: 6,
-      title: "Wireless Charging Stand",
-      price: 29.99,
-      originalPrice: 39.99,
-      discount: "25% off",
-      image: "https://images.unsplash.com/photo-1583394838336-acd977736f90?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8d2lyZWxlc3MlMjBjaGFyZ2VyfGVufDB8fDB8fHww&auto=format&fit=crop&w=500&q=60",
-      rating: 4.0,
-      reviews: 92,
-      badge: "New",
-      category: "electronics",
-      featured: false,
-      trending: false,
-      deal: true,
-      link: "#"
-  },
-  {
-      id: 7,
-      title: "Noise Cancelling Headphones",
-      price: 199.99,
-      discount: "25% off",
-      image: "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fGhlYWRwaG9uZXN8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60",
-      rating: 4.9,
-      reviews: 312,
-      category: "electronics",
-      featured: false,
-      trending: true,
-      deal: false,
-      link: "#"
-  },
-  {
-      id: 8,
-      title: "Smartphone Gimbal Stabilizer",
-      price: 79.99,
-      originalPrice: 99.99,
-      discount: "25% off",
-      image: "https://images.unsplash.com/photo-1573481078804-70c9d3406cff?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8Z2ltYmFsfGVufDB8fDB8fHww&auto=format&fit=crop&w=500&q=60",
-      rating: 4.4,
-      reviews: 67,
-      category: "electronics",
-      featured: false,
-      trending: false,
-      deal: true,
-      link: "#"
-  },
-  {
-      id: 9,
-      title: "Men's Casual T-Shirt",
-      price: 19.99,
-      discount: "25% off",
-      image: "https://images.unsplash.com/photo-1576566588028-4147f3842f27?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fHQlMjBzaGlydHxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60",
-      rating: 4.1,
-      reviews: 45,
-      category: "clothing",
-      featured: true,
-      trending: false,
-      deal: false,
-      link: "#"
-  },
-  {
-      id: 10,
-      title: "Women's Running Shoes",
-      price: 79.99,
-      originalPrice: 99.99,
-      discount: "25% off",
-      image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8c2hvZXN8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60",
-      rating: 4.6,
-      reviews: 132,
-      category: "clothing",
-      featured: false,
-      trending: false,
-      deal: true,
-      link: "#"
-  },
-  {
-      id: 11,
-      title: "Home Blender",
-      price: 49.99,
-      discount: "25% off",
-      image: "https://images.unsplash.com/photo-1561023364-9cd51c513f2a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fGJsZW5kZXJ8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60",
-      rating: 4.0,
-      reviews: 78,
-      category: "home",
-      featured: false,
-      trending: true,
-      deal: true,
-      link: "#"
-  },
-  {
-      id: 12,
-      title: "Facial Moisturizer",
-      price: 24.99,
-      discount: "25% off",
-      image: "https://images.unsplash.com/photo-1571781926291-c477ebfd024b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8YmVhdXR5JTIwcHJvZHVjdHN8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60",
-      rating: 4.3,
-      reviews: 56,
-      category: "beauty",
-      featured: false,
-      trending: true,
-      deal: true,
-      link: "#"
+    }];
   }
-];
+}
+
+// Global products variable
+let products = [];
+
+// Initialize the page
+document.addEventListener('DOMContentLoaded', async () => {
+  products = await fetchProducts();
+  displayProducts(products);
+  displayFeaturedProducts();
+  displayTrendingProducts();
+  displayDealProducts();
+  displayRecommendedProducts();
+  displaySuggestedProducts();
+});
 
 // Cart Data
 let cart = Array.isArray(JSON.parse(localStorage.getItem('cart'))) ? JSON.parse(localStorage.getItem('cart')) : [];
@@ -235,9 +96,9 @@ products.forEach(product => {
         <div class="product-info">
             <h3 class="product-title">${product.title}</h3>
             <div class="product-price">
-                <span class="current-price">$${Number(product.price || 0).toFixed(2)}</span>
-                ${product.originalPrice ? `<span class="original-price">$${Number(product.originalPrice).toFixed(2)}</span>` : ''}
-                <h4 class="discount">${product.discount}</h4>
+                <span class="current-price">₹${Number(product.price)}</span>
+                ${product.originalPrice ? `<span class="original-price">₹${Number(product.originalPrice).toFixed(2)}</span>` : ''}
+                <h4 class="discount">-${product.discount}%</h4>
             </div>
             <div class="product-rating">
                 <span class="stars">${stars} <span class="rating-count"> (${product.reviews}) </span> </span>
@@ -254,38 +115,6 @@ products.forEach(product => {
         </div>
     `;
 
-    productGrid.addEventListener('click', (e) => {
-      const shareBtn = e.target.closest('.share-btn');
-    
-      if (shareBtn) {
-        const productId = shareBtn.dataset.id;
-        const product = productsToDisplay.find(p => p.id.toString() === productId);
-        if (product) shareProduct(product);
-      }
-    });
-    
-    // Updated share function
-    function shareProduct(product) {
-      const shareData = {
-        url: product.link || window.location.href,
-      };
-    
-      if (navigator.share) {
-        navigator.share(shareData).catch(err => {
-          console.error("Sharing failed:", err);
-          fallbackShare(shareData);
-        });
-      } else {
-        fallbackShare(shareData);
-      }
-    }
-    
-    // Fallback: Copy link to clipboard
-    function fallbackShare(shareData) {
-      navigator.clipboard.writeText(shareData.url).then(() => {
-      });
-    }
-
     // Add click event to show product view
     productCard.addEventListener('click', (e) => {
         // Don't trigger if clicking on buttons or links
@@ -297,57 +126,112 @@ products.forEach(product => {
     gridElement.appendChild(productCard);
 });
 
+// Delegate share button click event to the gridElement
+gridElement.addEventListener('click', function (e) {
+    const shareBtn = e.target.closest('.share-btn');
+    if (shareBtn) {
+        const productId = shareBtn.dataset.id;
+        const product = productsToDisplay.find(p => p.id.toString() === productId);
+        if (product) shareProduct(product);
+    }
+});
+
+// Updated share function
+function shareProduct(product) {
+    const shareData = {
+        url: product.link || window.location.href,
+    };
+
+    if (navigator.share) {
+        navigator.share(shareData).catch(err => {
+            console.error("Sharing failed:", err);
+            fallbackShare(shareData);
+        });
+    } else {
+        fallbackShare(shareData);
+    }
+}
+
 // Add event listeners
 document.querySelectorAll('.cart-icon-btn').forEach(button => {
     button.addEventListener('click', addToCart);
 });
 }
 
-// Display Featured Products
-const featuredProducts = [...products]
-.filter(product => product.featured)
-displayProducts(featuredProducts, featuredGrid);
+/**
+ * Display Featured Products
+ * This function displays featured products in the featuredGrid.
+ */
+function displayFeaturedProducts() {
+  if (!Array.isArray(products)) return;
+  const featuredProducts = products.filter(product => product.featured);
+  displayProducts(featuredProducts, featuredGrid);
+}
 
-// Display Trending Products
+/**
+ * Display Trending Products
+ * Shows up to 5 trending products in the trendingGrid.
+ */
 function displayTrendingProducts() {
+  if (!Array.isArray(products)) return;
   const trendingProducts = products.filter(product => product.trending);
   displayProducts(trendingProducts.slice(0, 5), trendingGrid);
 }
 
-// Display All Trending Products
+/**
+ * Display All Trending Products
+ * Shows all trending products in the main productGrid.
+ */
 function displayAllTrendingProducts() {
+  if (!Array.isArray(products)) return;
   const trendingProducts = products.filter(product => product.trending);
   displayProducts(trendingProducts, productGrid);
-  searchResults.style.display = 'none';
+  if (searchResults) searchResults.style.display = 'none';
 }
 
-// Display Deal Products
+/**
+ * Display Deal Products
+ * Shows up to 5 deal products in the dealsGrid.
+ */
 function displayDealProducts() {
+  if (!Array.isArray(products)) return;
   const dealProducts = products.filter(product => product.deal);
   const shuffledDeals = dealProducts.sort(() => 0.5 - Math.random());
   displayProducts(shuffledDeals.slice(0, 5), dealsGrid);
 }
 
-// Display Recommended Products
+/**
+ * Display Recommended Products
+ * Shows up to 5 random recommended products in the recommendedGrid.
+ */
 function displayRecommendedProducts() {
+  if (!Array.isArray(products)) return;
   const recommendedProducts = [...products]
-      .sort(() => 0.5 - Math.random())
-      .slice(0, 5);
+    .sort(() => 0.5 - Math.random())
+    .slice(0, 5);
   displayProducts(recommendedProducts, recommendedGrid);
 }
 
-// Display All Recommended Products
+/**
+ * Display All Recommended Products
+ * Shows all recommended products in the main productGrid.
+ */
 function displayAllRecommendedProducts() {
-  const recommendedProducts = [...products]
-      .sort(() => 0.5 - Math.random());
+  if (!Array.isArray(products)) return;
+  const recommendedProducts = [...products].sort(() => 0.5 - Math.random());
   displayProducts(recommendedProducts, productGrid);
-  searchResults.style.display = 'none';
+  if (searchResults) searchResults.style.display = 'none';
 }
 
-// Display Suggested Products
+/**
+ * Display Suggested Products
+ * Shows up to 5 random suggested products in the suggested-grid.
+ */
 function displaySuggestedProducts() {
+  if (!Array.isArray(products)) return;
   const suggestedProducts = [...products].sort(() => 0.5 - Math.random()).slice(0, 5);
   const suggestedGrid = document.getElementById('suggested-grid');
+  if (!suggestedGrid) return;
   suggestedGrid.innerHTML = '';
 
   suggestedProducts.forEach(product => {
@@ -361,24 +245,18 @@ function displaySuggestedProducts() {
       <div class="suggested-product-info">
         <h3 class="product-title">${product.title}</h3>
         <div class="suggested-product-price">
-          <span class="suggested-current-price">$${Number(product.price || 0).toFixed(2)}</span>
-          ${product.originalPrice ? `<span class="original-price">$${Number(product.originalPrice).toFixed(2)}</span>` : ''}
+          <span class="suggested-current-price">₹${Number(product.price || 0).toFixed(2)}</span>
+          ${product.originalPrice ? `<span class="original-price">₹${Number(product.originalPrice).toFixed(2)}</span>` : ''}
         </div>
       </div>
     `;
-
-    // Add click event to open product modal
+    // Open product view modal on click
     productCard.addEventListener('click', () => {
       showProductView(product);
     });
-
     suggestedGrid.appendChild(productCard);
   });
 }
-
-// Call the function to display suggested products
-displaySuggestedProducts();
-
 
 // Sort Products
 function sortProducts() {
@@ -419,13 +297,13 @@ document.getElementById('productViewMainImage').src = product.image;
 updatePriceDisplay(product.price, product.originalPrice);
 
 if (product.originalPrice) {
-  document.getElementById('productViewOriginalPrice').textContent = `$${product.originalPrice.toFixed(2)}`;
+  document.getElementById('productViewOriginalPrice').textContent = `₹${product.originalPrice.toFixed(2)}`;
 } else {
   document.getElementById('productViewOriginalPrice').textContent = '';
 }
 
 if (product.discount) {
-  document.getElementById('productViewDiscount').textContent = product.discount;
+  document.getElementById('productViewDiscount').textContent = `-${product.discount}%`;
 } else {
   document.getElementById('productViewDiscount').textContent = '';
 }
@@ -465,18 +343,65 @@ if (product.inStock) {
   stockElement.classList.remove('in-stock');
 }
 
-// Clear and set thumbnails
+const mainImage = document.getElementById('productViewMainImage');
+// When mouse enters the thumbnail container, set a flag
 const thumbnailContainer = document.querySelector('.thumbnail-container');
-thumbnailContainer.innerHTML = '';
+if (thumbnailContainer) {
+  thumbnailContainer.addEventListener('mouseenter', () => {
+    // Do nothing, just allow hover to work
+  });
+  thumbnailContainer.addEventListener('mouseenter', () => {
+    mainImage.src = product.image;
+  });
+
+  // Clear and set thumbnails
+  thumbnailContainer.innerHTML = '';
+}
 
 // Add main image as first thumbnail
 addThumbnail(product.image, thumbnailContainer);
 
-// Add additional images if available
+// Add additional thumbnails if available, and set main image on hover
 if (product.additionalImages && product.additionalImages.length > 0) {
-  product.additionalImages.forEach(img => {
-    addThumbnail(img, thumbnailContainer);
+  const maxThumbnails = 3;
+  const imagesToShow = product.additionalImages.slice(0, maxThumbnails);
+
+  imagesToShow.forEach(img => {
+    const thumb = document.createElement('img');
+    thumb.src = img;
+    thumb.addEventListener('mouseenter', () => {
+      document.getElementById('productViewMainImage').src = img;
+    });
+    thumb.addEventListener('click', () => {
+      document.getElementById('productViewMainImage').src = img;
+    });
+    thumbnailContainer.appendChild(thumb);
   });
+
+  if (product.additionalImages.length > maxThumbnails) {
+    const moreCount = product.additionalImages.length - maxThumbnails;
+    const moreThumb = document.createElement('div');
+    moreThumb.className = 'more-thumbnails';
+    moreThumb.textContent = `+${moreCount}`;
+    moreThumb.style.cursor = 'pointer';
+    moreThumb.addEventListener('click', () => {
+      // Remove the "+N" button
+      moreThumb.remove();
+      // Add the rest of the thumbnails
+      product.additionalImages.slice(maxThumbnails).forEach(img => {
+        const thumb = document.createElement('img');
+        thumb.src = img;
+        thumb.addEventListener('mouseenter', () => {
+          document.getElementById('productViewMainImage').src = img;
+        });
+        thumb.addEventListener('click', () => {
+          document.getElementById('productViewMainImage').src = img;
+        });
+        thumbnailContainer.appendChild(thumb);
+      });
+    });
+    thumbnailContainer.appendChild(moreThumb);
+  }
 }
 
 // Reset coupon field
@@ -553,22 +478,34 @@ const couponMessage = document.getElementById('couponMessage');
 
 // Define available coupons
 const coupons = {
-  'SHAHID06': 0.5, // 50% discount
-  'SAVE10': 0.1,   // 10% discount
-  'WELCOME20': 0.2 // 20% discount
+  // Coupon codes mapped to product IDs and discount values
+  'SHAHID06': { ids: [1], discount: 0.5 },
+  'SAVE10':   { ids: [1, 2, 3], discount: 0.1 },
+  'WELCOME20': { ids: [], discount: 0.2 }
 };
 
 applyCouponBtn.addEventListener('click', () => {
   const couponCode = couponCodeInput.value.trim().toUpperCase();
-  
+
   if (coupons[couponCode] !== undefined) {
-    // Apply discount based on coupon
-    const discount = coupons[couponCode];
-    product.price = product.originalPriceForCoupon * (1 - discount);
-    product.currentDiscount = discount;
-    updatePriceDisplay(product.price, product.originalPriceForCoupon);
-    couponMessage.textContent = `${(discount * 100).toFixed(0)}% discount applied!`;
-    couponMessage.className = 'success';
+    // Check if coupon is valid for this product
+    const coupon = coupons[couponCode];
+    // If ids array is empty, coupon is valid for all products
+    if (coupon.ids.length === 0 || coupon.ids.includes(product.id)) {
+      const discount = coupon.discount;
+      product.price = product.originalPriceForCoupon * (1 - discount);
+      product.currentDiscount = discount;
+      updatePriceDisplay(product.price, product.originalPriceForCoupon);
+      couponMessage.textContent = `${(discount * 100).toFixed(0)}% discount applied!`;
+      couponMessage.className = 'success';
+    } else {
+      // Coupon not valid for this product
+      product.price = product.originalPriceForCoupon;
+      product.currentDiscount = 0;
+      updatePriceDisplay(product.price, product.originalPriceForCoupon);
+      couponMessage.textContent = 'Coupon not valid for this product';
+      couponMessage.className = 'error';
+    }
   } else if (couponCode === '') {
     couponMessage.textContent = 'Please enter a coupon code';
     couponMessage.className = 'error';
@@ -598,10 +535,10 @@ couponCodeInput.addEventListener('keypress', (e) => {
 }
 
 function updatePriceDisplay(currentPrice, originalPrice) {
-document.getElementById('productViewPrice').textContent = `$${(currentPrice || 0).toFixed(2)}`;
+document.getElementById('productViewPrice').textContent = `₹${(currentPrice || 0).toFixed(2)}`;
 
 if (originalPrice) {
-  document.getElementById('productViewOriginalPrice').textContent = `$${originalPrice.toFixed(2)}`;
+  document.getElementById('productViewOriginalPrice').textContent = `₹${originalPrice.toFixed(2)}`;
 } else {
   document.getElementById('productViewOriginalPrice').textContent = '';
 }
@@ -647,7 +584,8 @@ const clearSearchBtn = document.getElementById('clear-search-btn');
 
 // Data
 let recentSearches = JSON.parse(localStorage.getItem('recentSearches')) || [];
-const trendingSearches = ["headphones", "watches", "shoes"];
+const trendingSearches = ["electronics", "book", "home decor"];
+const trendingSearchesDisplay = trendingSearches.map(term => term.toUpperCase());
 
 // Configuration
 const config = {
@@ -1005,8 +943,8 @@ function updateCart() {
   
   if (cart.length === 0) {
       cartItems.innerHTML = '<p class="empty-cart">Your cart is empty</p>';
-      cartSubtotal.textContent = '$0.00';
-      cartTotal.textContent = '$0.00';
+      cartSubtotal.textContent = '₹0.00';
+      cartTotal.textContent = '₹0.00';
   } else {
       let subtotal = 0;
       
@@ -1023,7 +961,7 @@ function updateCart() {
           </div>
           <div class="cart-item-details">
           <h4 class="cart-item-title">${item.title}</h4>
-          <p class="cart-item-price">$${(item.price || 0).toFixed(2)}</p>
+          <p class="cart-item-price">₹${(item.price || 0).toFixed(2)}</p>
           <div class="cart-item-actions">
           <div class="quantity-control">
           <button class="quantity-btn minus" data-id="${item.id}">-</button>
@@ -1066,8 +1004,8 @@ function updateCart() {
       const shipping = 0.00;
       const total = parseFloat(subtotal) + shipping;
       
-      cartSubtotal.textContent = `$${subtotal.toFixed(2)}`;
-      cartTotal.textContent = `$${total.toFixed(2)}`;
+      cartSubtotal.textContent = `₹${subtotal.toFixed(2)}`;
+      cartTotal.textContent = `₹${total.toFixed(2)}`;
   }
   
   updateCartCount();
