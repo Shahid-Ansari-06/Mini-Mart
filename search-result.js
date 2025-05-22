@@ -1,191 +1,46 @@
-// Sample Product Data
-const products = [
-  {
+// Fetch products
+async function fetchProducts() {
+  try {
+    const scriptUrl = 'https://script.google.com/macros/s/AKfycbzafv3PZvWjYzBoT3e-5WoqTK5Q2FZ-nWecpAPgtqUM7dkF-lrJz7ChLKdfhesXXc6v/exec';
+    const response = await fetch(scriptUrl);
+    const products = await response.json();
+    return products;
+  } catch (error) {
+    console.error('Error loading products:', error);
+    // Fallback to local products if API fails
+    return [{
       id: 1,
       title: "Wireless Bluetooth Headphones",
       description: "Detailed product description goes here. This could include features, specifications, and other details about the product.",
       price: 99.99,
       originalPrice: 129.99,
-      discount: "25% off",
+      discount: "25",
       image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8aGVhZHBob25lc3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60",
-      additionalImages:[
+      additionalImages: [
         "https://images.unsplash.com/photo-1523275335684-37898b6baf30?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8c21hcnQlMjB3YXRjaHxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60"
       ],
       rating: 4.5,
       reviews: 125,
       inStock: true,
-      sku : 'SP001',
+      sku: '',
       brand: 'Boat',
       badge: "Popular",
-      category: "electronics",
+      category: "Electronics",
       featured: true,
-      trending: false,
-      deal: false,
+      trending: true,
+      deal: true,
       link: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8c21hcnQlMjB3YXRjaHxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60"
-  },
-  {
-      id: 2,
-      title: "Smart Watch with Fitness Tracker",
-      price: 149.99,
-      originalPrice: 199.99,
-      discount: "25% off",
-      image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8c21hcnQlMjB3YXRjaHxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60",
-      rating: 4.2,
-      reviews: 89,
-      badge: "Sale",
-      category: "electronics",
-      featured: true,
-      trending: false,
-      deal: false,
-      link: "#"
-  },
-  {
-      id: 3,
-      title: "Portable Bluetooth Speaker",
-      price: 59.99,
-      discount: "25% off",
-      image: "https://images.unsplash.com/photo-1572569511254-d8f925fe2cbb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8Ymx1ZXRvb3RoJTIwc3BlYWtlcnxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60",
-      rating: 4.7,
-      reviews: 210,
-      category: "electronics",
-      featured: true,
-      trending: false,
-      deal: false,
-      link: "#"
-  },
-  {
-      id: 4,
-      title: "4K Ultra HD Smart TV",
-      price: 699.99,
-      originalPrice: 899.99,
-      discount: "25% off",
-      image: "https://images.unsplash.com/photo-1593784991095-a205069470b6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8dHZ8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60",
-      rating: 4.8,
-      reviews: 56,
-      badge: "Best Seller",
-      category: "electronics",
-      featured: false,
-      trending: true,
-      deal: false,
-      link: "#"
-  },
-  {
-      id: 5,
-      title: "Laptop Backpack with USB Charging Port",
-      price: 39.99,
-      discount: "25% off",
-      image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fGJhY2twYWNrfGVufDB8fDB8fHww&auto=format&fit=crop&w=500&q=60",
-      rating: 4.3,
-      reviews: 178,
-      category: "electronics",
-      featured: false,
-      trending: false,
-      deal: true,
-      link: "#"
-  },
-  {
-      id: 6,
-      title: "Wireless Charging Stand",
-      price: 29.99,
-      originalPrice: 39.99,
-      discount: "25% off",
-      image: "https://images.unsplash.com/photo-1583394838336-acd977736f90?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8d2lyZWxlc3MlMjBjaGFyZ2VyfGVufDB8fDB8fHww&auto=format&fit=crop&w=500&q=60",
-      rating: 4.0,
-      reviews: 92,
-      badge: "New",
-      category: "electronics",
-      featured: false,
-      trending: false,
-      deal: true,
-      link: "#"
-  },
-  {
-      id: 7,
-      title: "Noise Cancelling Headphones",
-      price: 199.99,
-      discount: "25% off",
-      image: "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fGhlYWRwaG9uZXN8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60",
-      rating: 4.9,
-      reviews: 312,
-      category: "electronics",
-      featured: false,
-      trending: true,
-      deal: false,
-      link: "#"
-  },
-  {
-      id: 8,
-      title: "Smartphone Gimbal Stabilizer",
-      price: 79.99,
-      originalPrice: 99.99,
-      discount: "25% off",
-      image: "https://images.unsplash.com/photo-1573481078804-70c9d3406cff?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8Z2ltYmFsfGVufDB8fDB8fHww&auto=format&fit=crop&w=500&q=60",
-      rating: 4.4,
-      reviews: 67,
-      category: "electronics",
-      featured: false,
-      trending: false,
-      deal: true,
-      link: "#"
-  },
-  {
-      id: 9,
-      title: "Men's Casual T-Shirt",
-      price: 19.99,
-      discount: "25% off",
-      image: "https://images.unsplash.com/photo-1576566588028-4147f3842f27?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fHQlMjBzaGlydHxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60",
-      rating: 4.1,
-      reviews: 45,
-      category: "clothing",
-      featured: true,
-      trending: false,
-      deal: false,
-      link: "#"
-  },
-  {
-      id: 10,
-      title: "Women's Running Shoes",
-      price: 79.99,
-      originalPrice: 99.99,
-      discount: "25% off",
-      image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8c2hvZXN8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60",
-      rating: 4.6,
-      reviews: 132,
-      category: "clothing",
-      featured: false,
-      trending: false,
-      deal: true,
-      link: "#"
-  },
-  {
-      id: 11,
-      title: "Home Blender",
-      price: 49.99,
-      discount: "25% off",
-      image: "https://images.unsplash.com/photo-1561023364-9cd51c513f2a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fGJsZW5kZXJ8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60",
-      rating: 4.0,
-      reviews: 78,
-      category: "home",
-      featured: false,
-      trending: true,
-      deal: false,
-      link: "#"
-  },
-  {
-      id: 12,
-      title: "Facial Moisturizer",
-      price: 24.99,
-      discount: "25% off",
-      image: "https://images.unsplash.com/photo-1571781926291-c477ebfd024b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8YmVhdXR5JTIwcHJvZHVjdHN8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60",
-      rating: 4.3,
-      reviews: 56,
-      category: "beauty",
-      featured: false,
-      trending: true,
-      deal: false,
-      link: "#"
+    }];
   }
-];
+}
+
+// Global products variable
+let products = [];
+
+// Initialize the page
+document.addEventListener('DOMContentLoaded', async () => {
+  products = await fetchProducts();
+});
 
 // DOM Elements
 const searchResults = document.getElementById('search-results');
@@ -396,7 +251,8 @@ const clearSearchBtn = document.getElementById('clear-search-btn');
 
 // Data
 let recentSearches = JSON.parse(localStorage.getItem('recentSearches')) || [];
-const trendingSearches = ["headphones", "watches", "shoes"];
+const trendingSearches = ["electronics", "book", "home decor"];
+const trendingSearchesDisplay = trendingSearches.map(term => term.toUpperCase());
 
 // Configuration
 const config = {
@@ -491,7 +347,7 @@ liveResults.style.display = 'none';
 
 // Search products
 function searchProducts(query) {
-query = query.toLowerCase();
+const lowerCaseQuery = query.toLowerCase();
 return products.filter(product => 
   product.title.toLowerCase().includes(query) || 
   product.category.toLowerCase().includes(query) ||
@@ -717,7 +573,7 @@ document.querySelectorAll('.view-all-results').forEach(btn => {
     liveResults.style.display = 'none';
 
     // Scroll to products
-    document.querySelector('.products-container').scrollIntoView({
+    document.querySelector('.search-result-container').scrollIntoView({
       behavior: 'smooth'
     });
   });
@@ -726,15 +582,3 @@ document.querySelectorAll('.view-all-results').forEach(btn => {
 
 // Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', initSearch);
-
-// Initialize the App
-function init() {
-  // Event listeners
-  searchBtn.addEventListener('click', searchProducts);
-  searchInput.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') searchProducts();
-  });
-}
-
-// Initialize the app when DOM is loaded
-document.addEventListener('DOMContentLoaded', init);
