@@ -87,11 +87,19 @@
 
 </head>
 <body>
+   <!-- Splash Screen -->
+    <div class="splash-screen">
+        <div class="splash-content">
+            <img src="d27ba092-b9d7-43b4-b5fc-389c5cd01465.png" class="splash-logo" loading="lazy">
+        </div>
+    </div>
+
+  <main class="main-content">
     <!-- Header/Navbar -->
     <header class="header">
         <div class="container">
             <div class="logo">
-              <a href="/"><img src="d27ba092-b9d7-43b4-b5fc-389c5cd01465.png">
+              <a href="/"><img src="d27ba092-b9d7-43b4-b5fc-389c5cd01465.png" loading="lazy">
                 <h3 class="heading-right-margin"> <span style="color: red;"> m</span>ini mart </h3>
               </a>
             </div>
@@ -656,7 +664,7 @@
       </button>
       <div id="aiAssistantModal" class="ai-assistant-modal" style="display: none;">
         <div class="ai-assistant-header">
-          <span style="color: #fff; font-size: 20px;"><span style="font-family: 'Baloo 2', cursive; font-size: 22.5px;"><span style="color: red;">m</span>ini mart </span><span style="font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;"> AI Assistant </span></span>
+          <span style="color: #000000; font-size: 20px;"><span style="font-family: 'Baloo 2', cursive; font-size: 22.5px;"><span style="color: red;">m</span>ini mart </span><span style="font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;"> AI Assistant </span></span>
           <button id="closeAiAssistant" class="close-ai-btn">&times;</button>
         </div>
         <div id="aiMessages" class="ai-messages"></div>
@@ -686,7 +694,7 @@
         100% { transform: translateY(0) scale(1); opacity: 1; }
       }
       .ai-assistant-header {
-        background: #0078d4;
+        background: #f2f2f2;
         padding: 10px 15px;
         font-weight: bold;
         display: flex;
@@ -698,7 +706,7 @@
         background: none;
         border: none;
         font-size: 25px;
-        color: #ffffff;
+        color: #000000;
         cursor: pointer;
       }
       .ai-messages {
@@ -822,6 +830,7 @@
             <p>&copy; 2025 Mini Mart. All rights reserved.</p>
         </div>
     </footer>
+  </main>
 
 <!-- JavaScript -->
 <script>
