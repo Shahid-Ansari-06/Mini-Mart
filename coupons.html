@@ -723,6 +723,136 @@
             </div>
         </div>
     </div>
+
+    <!-- AI Assistant Modal -->
+      <button id="openAiAssistant">
+        <img src="360_F_586121976_gUpDx7bZ0Lgq6bBjQ33g6COuuQnqMWz1-removebg-preview-removebg-preview.png" style="width: 80px; object-fit: cover; border-radius: 50%;" loading="lazy">
+      </button>
+      <div id="aiAssistantModal" class="ai-assistant-modal" style="display: none;">
+        <div class="ai-assistant-header">
+          <span style="color: #000000; font-size: 20px;"><span style="font-family: 'Baloo 2', cursive; font-size: 22.5px;"><span style="color: red;">m</span>ini mart </span><span style="font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;"> AI Assistant </span></span>
+          <button id="closeAiAssistant" class="close-ai-btn">&times;</button>
+        </div>
+        <div id="aiMessages" class="ai-messages"></div>
+        <form id="aiInputForm" class="ai-input-form" autocomplete="off">
+          <input type="text" id="aiInput" placeholder="Ask me anything..." autocomplete="off" required />
+          <button type="submit"><i class="fas fa-paper-plane"></i></button>
+        </form>
+      </div>
+      <style>
+      .ai-assistant-modal {
+        position: fixed;
+        right: 30px;
+        bottom: 115px;
+        width: 350px;
+        height: 425px;
+        background: #fff;
+        border-radius: 15px;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+        z-index: 1200;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        animation: aiModalIn 0.35s cubic-bezier(0.4,0,0.2,1);
+      }
+      @keyframes aiModalIn {
+        0% { transform: translateY(60px) scale(0.97); opacity: 0; }
+        100% { transform: translateY(0) scale(1); opacity: 1; }
+      }
+      .ai-assistant-header {
+        background: #f2f2f2;
+        padding: 10px 15px;
+        font-weight: bold;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #eee;
+      }
+      .close-ai-btn {
+        background: none;
+        border: none;
+        font-size: 25px;
+        color: #000000;
+        cursor: pointer;
+      }
+      .ai-messages {
+        display: flex;
+        flex: 1;
+        padding: 16px;
+        justify-content: flex-start;
+        overflow-y: auto;
+        background: #fafbfc;
+        flex-direction: column;
+        scroll-behavior: smooth;
+        gap: 10px;
+      }
+      .ai-message {
+        max-width: 85%;
+        margin-bottom: 2px;
+        opacity: 0;
+        transform: translateY(40px);
+        animation: slideUpMsg 0.35s cubic-bezier(0.4,0,0.2,1) forwards;
+      }
+      .ai-message.user {
+        align-self: flex-end;
+        background: #e6f3ff;
+        color: #222;
+        border-radius: 16px 16px 4px 16px;
+        padding: 8px 14px;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+      }
+      .ai-message.bot {
+        align-self: flex-start;
+        background: #f2f2f2;
+        color: #222;
+        border-radius: 16px 16px 16px 4px;
+        padding: 8px 14px;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+      }
+      @keyframes slideUpMsg {
+        0% { opacity: 0; transform: translateY(40px);}
+        100% { opacity: 1; transform: translateY(0);}
+      }
+      .ai-input-form {
+        display: flex;
+        border-top: 1px solid #eee;
+        background: #fff;
+        padding: 10px;
+        gap: 8px;
+      }
+      .ai-input-form input[type="text"] {
+        flex: 1;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 8px 12px;
+        font-size: 15px;
+        outline: none;
+        transition: border 0.2s;
+      }
+      .ai-input-form input[type="text"]:focus {
+        border: 1.5px solid #0078d4;
+      }
+      .ai-input-form button {
+        background: #0078d4;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        padding: 0 16px;
+        font-size: 18px;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+      .ai-input-form button:hover {
+        background: #005fa3;
+      }
+       @media (max-width: 600px) {
+            .ai-assistant-modal {
+                width: 95%;
+                right: 2.5%;
+                bottom: 105px;
+            }
+        }
+      </style>
     
     <!-- Footer -->
     <footer class="footer">
@@ -851,6 +981,7 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
     <script src="search-result.js" defer></script>
     <script src="shopping-cart.js" defer></script>
+    <script src="ai-assistant.js" defer></script>
     <script>
 // Notification data - initial state
 const initialNotifications = [
@@ -858,46 +989,10 @@ const initialNotifications = [
         id: 1,
         title: "New Message Received",
         time: "10 min ago",
-        content: "You have received a new message from John Doe regarding your recent order.",
+        content: "New Feature on Mini Mart.",
         isRead: false,
         isImportant: false,
         actions: ["markAsRead", "archive"]
-    },
-    {
-        id: 2,
-        title: "Order Shipped",
-        time: "2 hours ago",
-        content: "Your order #12345 has been shipped and will arrive in 2-3 business days.",
-        isRead: true,
-        isImportant: false,
-        actions: ["trackOrder", "archive"]
-    },
-    {
-        id: 3,
-        title: "Security Alert",
-        time: "5 hours ago",
-        content: "Unusual login attempt detected from a new device. Was this you?",
-        isRead: false,
-        isImportant: true,
-        actions: ["secureAccount", "dismiss"]
-    },
-    {
-        id: 4,
-        title: "Weekly Digest",
-        time: "1 day ago",
-        content: "Here's what you missed this week: New products, special offers, and more!",
-        isRead: true,
-        isImportant: false,
-        actions: ["view", "archive"]
-    },
-    {
-        id: 5,
-        title: "Payment Received",
-        time: "3 days ago",
-        content: "Your payment of $49.99 has been successfully processed.",
-        isRead: true,
-        isImportant: false,
-        actions: ["viewReceipt", "archive"]
     }
 ];
 
@@ -909,7 +1004,7 @@ const coupons = [
         discount: "20% OFF",
         title: "Summer Sale",
         description: "Get 20% off on all summer collection items. Limited time offer!",
-        expiry: "2025-06-30",
+        expiry: "2025-05-15",
         category: "fashion",
         isSaved: false
     },
@@ -919,7 +1014,7 @@ const coupons = [
         discount: "FREE SHIPPING",
         title: "Free Delivery",
         description: "Free shipping on all orders over $50. No code needed!",
-        expiry: "2023-06-15",
+        expiry: "2025-05-15",
         category: "all",
         isSaved: true
     },
@@ -929,7 +1024,7 @@ const coupons = [
         discount: "$15 OFF",
         title: "New Customer Offer",
         description: "$15 off your first order. Minimum spend $30.",
-        expiry: "2023-12-31",
+        expiry: "2025-05-15",
         category: "all",
         isSaved: false
     },
@@ -939,7 +1034,7 @@ const coupons = [
         discount: "30% OFF",
         title: "Flash Sale",
         description: "30% off selected items for 24 hours only.",
-        expiry: "2023-05-01",
+        expiry: "2025-05-15",
         category: "electronics",
         isSaved: false
     },
@@ -949,7 +1044,7 @@ const coupons = [
         discount: "50% OFF",
         title: "Tech Clearance",
         description: "Half price on all clearance tech items. Limited stock!",
-        expiry: "2023-07-15",
+        expiry: "2025-05-15",
         category: "electronics",
         isSaved: false
     },
@@ -959,7 +1054,7 @@ const coupons = [
         discount: "25% OFF",
         title: "Beauty Week",
         description: "25% off all beauty products this week only.",
-        expiry: "2023-06-10",
+        expiry: "2025-05-15",
         category: "beauty",
         isSaved: false
     }
