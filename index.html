@@ -163,20 +163,7 @@
   </style>
 
 <script>
- const INSTALL_BAR_ID = 'installBar';
-const HIDE_KEY = 'installBarHiddenAt';
-const HIDE_DURATION = 2 * 60 * 1000; // 2 minutes in milliseconds
-
-function showInstallBar() {
-  document.getElementById(INSTALL_BAR_ID).style.display = 'flex';
-}
-
-function hideInstallBar() {
-  document.getElementById(INSTALL_BAR_ID).style.display = 'none';
-  localStorage.setItem(HIDE_KEY, Date.now());
-}
-
-function isBrowserEnvironment() {
+ function isBrowserEnvironment() {
   const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
   const userAgent = navigator.userAgent || navigator.vendor || window.opera;
   const isWebView = /(FBAV|Instagram|Line|WebView|wv)/i.test(userAgent);
@@ -184,24 +171,24 @@ function isBrowserEnvironment() {
   return !isStandalone && !isWebView && !isMobileApp;
 }
 
-window.onload = function() {
-  if (isBrowserEnvironment()) {
-    const hiddenAt = localStorage.getItem(HIDE_KEY);
-    const now = Date.now();
+function downloadApk() {
+  const apkUrl = 'MiniMart.apk';
+  const link = document.createElement('a');
+  link.href = apkUrl;
+  link.download = 'MiniMart.apk';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
 
-    if (!hiddenAt || (now - hiddenAt) > HIDE_DURATION) {
-      showInstallBar();
-    } else {
-      hideInstallBar();
-    }
-  }
-};
+if (isBrowserEnvironment()) {
+  const installBar = document.getElementById('installBar');
+  installBar.style.display = 'flex';
 
-// Auto hide install bar after 2 minutes
-setTimeout(() => {
-  hideInstallBar();
-}, HIDE_DURATION);
-
+  setTimeout(() => {
+    installBar.style.display = 'none';
+  }, 120000);
+}
 </script>
   
     <!-- Header/Navbar -->
