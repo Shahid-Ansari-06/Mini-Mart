@@ -95,6 +95,87 @@
     </div>
 
   <main class="main-content">
+    <!-- App Download Button -->
+    <div class="install-bar" id="installBar">
+  <div class="install-left">
+    <button class="close-btn" onclick="document.getElementById('installBar').style.display='none'">&times;</button>
+    <div class="install-text">
+      <strong>Amazon MX Player App</strong>
+      <span>Install for better experience</span>
+    </div>
+  </div>
+  <button class="install-btn" onclick="window.location.href='MiniMart.apk'">INSTALL</button>
+ </div>
+
+  <style>
+    .install-bar {
+      position: relative;
+      top: 0;
+      width: 100%;
+      background-color: #0f0f0f;
+      color: #ffffff;
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 16px;
+      z-index: 1000;
+      font-size: 14px;
+    }
+
+    .install-text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.2;
+    }
+
+    .install-text strong {
+      font-size: 15px;
+    }
+
+    .install-btn {
+      padding: 6px 14px;
+      background: transparent;
+      border: 1px solid #3a82f7;
+      color: #3a82f7;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 18px;
+      margin-right: 10px;
+      cursor: pointer;
+    }
+
+    .install-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+  </style>
+
+<script>
+ 
+
+  function downloadApk() {
+    const apkUrl = 'MiniMart.apk';
+    const link = document.createElement('a');
+    link.href = apkUrl;
+    link.download = 'MiniMart.apk';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
+  if (isBrowserEnvironment()) {
+    document.getElementById('installBar').style.display = 'flex';
+  }
+</script>
+  
     <!-- Header/Navbar -->
     <header class="header">
         <div class="container">
