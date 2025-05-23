@@ -164,26 +164,30 @@
 
 <script>
  function isBrowserEnvironment() {
-    const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
-    const userAgent = navigator.userAgent || navigator.vendor || window.opera;
-    const isWebView = /(FBAV|Instagram|Line|WebView|wv)/i.test(userAgent);
-    const isMobileApp = /(Android|iPhone|iPad)/i.test(userAgent) && isWebView;
-    return !isStandalone && !isWebView && !isMobileApp;
-  }
+  const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
+  const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+  const isWebView = /(FBAV|Instagram|Line|WebView|wv)/i.test(userAgent);
+  const isMobileApp = /(Android|iPhone|iPad)/i.test(userAgent) && isWebView;
+  return !isStandalone && !isWebView && !isMobileApp;
+}
 
-  function downloadApk() {
-    const apkUrl = 'MiniMart.apk';
-    const link = document.createElement('a');
-    link.href = apkUrl;
-    link.download = 'MiniMart.apk';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  }
+function downloadApk() {
+  const apkUrl = 'MiniMart.apk';
+  const link = document.createElement('a');
+  link.href = apkUrl;
+  link.download = 'MiniMart.apk';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
 
-  if (isBrowserEnvironment()) {
-    document.getElementById('installBar').style.display = 'flex';
-  }
+if (isBrowserEnvironment()) {
+  document.getElementById('installBar').style.display = 'flex';
+}
+
+window.addEventListener('appinstalled', () => {
+  document.getElementById('installBar').style.display = 'none';
+});
 </script>
   
     <!-- Header/Navbar -->
