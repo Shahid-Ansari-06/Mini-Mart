@@ -114,6 +114,7 @@
       width: 100%;
       background-color: #0f0f0f;
       color: #ffffff;
+      display: none;
       align-items: center;
       justify-content: space-between;
       padding: 10px 16px;
@@ -158,7 +159,13 @@
   </style>
 
 <script>
- 
+ function isBrowserEnvironment() {
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
+    const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+    const isWebView = /(FBAV|Instagram|Line|WebView|wv)/i.test(userAgent);
+    const isMobileApp = /(Android|iPhone|iPad)/i.test(userAgent) && isWebView;
+    return !isStandalone && !isWebView && !isMobileApp;
+  }
 
   function downloadApk() {
     const apkUrl = 'MiniMart.apk';
