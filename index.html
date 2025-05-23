@@ -84,6 +84,13 @@
     }
   }
 </script>
+<script>
+window.onload = function() {
+    if (typeof AndroidFullscreen !== 'undefined') {
+        AndroidFullscreen.enterImmersiveMode();
+    }
+};
+</script>
 
 </head>
 <body>
