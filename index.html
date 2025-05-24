@@ -530,7 +530,7 @@ if (isBrowserEnvironment()) {
 
             <!-- New Arrivals -->
             <div class="new-product-card">
-             <h2 style="font-size: 24px;">New on <span style="font-family: 'Baloo 2', cursive;"><span style="color: red;">m</span>ini mart </span></h2>
+             <h2>New on <span style="font-family: 'Baloo 2', cursive;"><span style="color: red;">m</span>ini mart </span></h2>
               <div class="new-products">
                <div class="new-product">
                 <img src="assets/61TapeOXotL._SL1500_.jpg.webp"/>
@@ -598,7 +598,7 @@ if (isBrowserEnvironment()) {
             <!-- Sponsored card -->
             <section>
               <div class="sponsored-card display-none1">
-                <img src="assets/2e2f10a89a330327.webp">
+                <img src="https://static-assets-web.flixcart.com/www/linchpin/batman-returns/images/fk-default-image-75ff340b.png?q=90">
               </div>
             </section>
 
@@ -952,7 +952,7 @@ document.addEventListener('DOMContentLoaded', function() {
       const firstName = user.username.split(' ')[0]; // Extract first name only
       authLink.innerHTML = `
       <i class="fas fa-circle-user"></i>
-      <span class="username-hidden">${firstName}</span>
+      <span class="username-hidden">Hi,&nbsp;${firstName}</span>
       <i class="fas fa-caret-down aero"></i>
     `;
       authLink.href = '#';
@@ -967,7 +967,7 @@ document.addEventListener('DOMContentLoaded', function() {
       <i class="fas fa-circle-user"></i>
       <span class="nav-text">Sign In</span>
     `;
-      authLink.href = 'signin.html';
+      authLink.href = '/signin';
       userDropdown.style.display = 'none';
     }
   }
