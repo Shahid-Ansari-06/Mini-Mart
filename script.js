@@ -17,14 +17,16 @@ async function fetchProducts() {
       image: "assets/3a1b2293-168d-44a0-a2eb-4ffb91ad6462.png",
       rating: 5,
       reviews: 125,
-      inStock: false,
+      inStock: true,
       sku: '',
       brand: 'mini mart',
       badge: "Error",
       category: "Error",
-      featured: false,
-      trending: false,
-      deal: false,
+      featured: true,
+      trending: true,
+      deal: true,
+      suggested: true,
+      recommended: true,
       link: "#"
     }];
   }
@@ -217,10 +219,19 @@ function displayDealProducts() {
  */
 function displayRecommendedProducts() {
   if (!Array.isArray(products)) return;
-  const recommendedProducts = [...products]
+
+  const recommendedProducts = products.filter(product => product.recommended === true);
+
+  if (recommendedProducts.length === 0) {
+    console.log("No recommended products found.");
+    return;
+  }
+
+  const randomRecommendedProducts = [...recommendedProducts]
     .sort(() => 0.5 - Math.random())
     .slice(0, 5);
-  displayProducts(recommendedProducts, recommendedGrid);
+
+  displayProducts(randomRecommendedProducts, recommendedGrid);
 }
 
 /**
@@ -240,11 +251,15 @@ function displayAllRecommendedProducts() {
  */
 function displaySuggestedProducts() {
   if (!Array.isArray(products)) return;
-  const suggestedProducts = [...products].sort(() => 0.5 - Math.random()).slice(0, 5);
+  
+  const suggestedProducts = products.filter(product => product.suggested === true);
+  
+  if (suggestedProducts.length === 0) return;
+  
   const suggestedGrid = document.getElementById('suggested-grid');
   if (!suggestedGrid) return;
+  
   suggestedGrid.innerHTML = '';
-
   suggestedProducts.forEach(product => {
     const productCard = document.createElement('div');
     productCard.className = 'suggested-product-card';
@@ -268,6 +283,18 @@ function displaySuggestedProducts() {
     suggestedGrid.appendChild(productCard);
   });
 }
+
+/**
+ *New on mini mart
+ * Open product view modal on click.
+ */
+document.querySelectorAll('.new-product').forEach(productEl => {
+  productEl.addEventListener('click', () => {
+    const productId = productEl.getAttribute('data-product-id');
+    const product = products[productId];
+    if (product) showProductView(product);
+  });
+});
 
 // Sort Products
 function sortProducts() {
