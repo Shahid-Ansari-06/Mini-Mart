@@ -151,18 +151,6 @@ function shareProduct(product) {
     }
 }
 
-// Fallback share method for desktop or unsupported browsers
-function fallbackShare(shareData) {
-    const tempInput = document.createElement("input");
-    tempInput.value = shareData.url;
-    document.body.appendChild(tempInput);
-    tempInput.select();
-    document.execCommand("copy");
-    document.body.removeChild(tempInput);
-
-    alert("Link copied to clipboard!");
-}
-
 // Add event listeners
 document.querySelectorAll('.cart-icon-btn').forEach(button => {
     button.addEventListener('click', addToCart);
