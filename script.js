@@ -136,25 +136,31 @@ gridElement.addEventListener('click', function (e) {
 function shareProduct(product) {
     const shareData = {
         title: product.title || "Check this out!",
-        text: product.description || "Look what I found!",
+        text: product.description || "Look at this product I found!",
         url: product.link || window.location.href,
     };
 
-    if (navigator.share && navigator.canShare && navigator.canShare(shareData)) {
+    if (navigator.share) {
         navigator.share(shareData)
-            .then(() => console.log("Share successful"))
             .catch(err => {
-                console.error("Sharing failed:", err);
+                console.error("Native share failed:", err);
                 fallbackShare(shareData);
             });
-    } else if (navigator.share) {
-        navigator.share(shareData).catch(err => {
-            console.error("Sharing failed:", err);
-            fallbackShare(shareData);
-        });
     } else {
         fallbackShare(shareData);
     }
+}
+
+// Fallback share method for desktop or unsupported browsers
+function fallbackShare(shareData) {
+    const tempInput = document.createElement("input");
+    tempInput.value = shareData.url;
+    document.body.appendChild(tempInput);
+    tempInput.select();
+    document.execCommand("copy");
+    document.body.removeChild(tempInput);
+
+    alert("Link copied to clipboard!");
 }
 
 // Add event listeners
