@@ -10,26 +10,22 @@ async function fetchProducts() {
     // Fallback to local products if API fails
     return [{
       id: 1,
-      title: "Wireless Bluetooth Headphones",
-      description: "Detailed product description goes here. This could include features, specifications, and other details about the product.",
-      price: 99.99,
-      originalPrice: 129.99,
-      discount: "25",
-      image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8aGVhZHBob25lc3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60",
-      additionalImages: [
-        "https://images.unsplash.com/photo-1523275335684-37898b6baf30?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8c21hcnQlMjB3YXRjaHxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60"
-      ],
-      rating: 4.5,
+      title: "404 Error",
+      price: 0,
+      originalPrice: 0,
+      discount: "0",
+      image: "assets/3a1b2293-168d-44a0-a2eb-4ffb91ad6462.png",
+      rating: 5,
       reviews: 125,
-      inStock: true,
+      inStock: false,
       sku: '',
-      brand: 'Boat',
-      badge: "Popular",
-      category: "Electronics",
-      featured: true,
-      trending: true,
-      deal: true,
-      link: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8c21hcnQlMjB3YXRjaHxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60"
+      brand: 'mini mart',
+      badge: "Error",
+      category: "Error",
+      featured: false,
+      trending: false,
+      deal: false,
+      link: "#"
     }];
   }
 }
@@ -136,20 +132,35 @@ gridElement.addEventListener('click', function (e) {
     }
 });
 
-// Updated share function
+// Share function with fallback
 function shareProduct(product) {
     const shareData = {
+        title: product.title || "Check this out!",
+        text: product.description || "Look at this product I found!",
         url: product.link || window.location.href,
     };
 
     if (navigator.share) {
-        navigator.share(shareData).catch(err => {
-            console.error("Sharing failed:", err);
-            fallbackShare(shareData);
-        });
+        navigator.share(shareData)
+            .catch(err => {
+                console.error("Native share failed:", err);
+                fallbackShare(shareData);
+            });
     } else {
         fallbackShare(shareData);
     }
+}
+
+// Fallback share method for desktop or unsupported browsers
+function fallbackShare(shareData) {
+    const tempInput = document.createElement("input");
+    tempInput.value = shareData.url;
+    document.body.appendChild(tempInput);
+    tempInput.select();
+    document.execCommand("copy");
+    document.body.removeChild(tempInput);
+
+    alert("Link copied to clipboard!");
 }
 
 // Add event listeners
@@ -1089,40 +1100,53 @@ function closeCartModal() {
 
 // Splash Screen
 document.addEventListener('DOMContentLoaded', function() {
-    document.body.classList.add('splash-active');
-    
-    const minDisplayTime = 2000;
-    const startTime = new Date().getTime();
-    
-    window.addEventListener('load', function() {
-        const endTime = new Date().getTime();
-        const loadTime = endTime - startTime;
-        const remainingTime = Math.max(0, minDisplayTime - loadTime);
+    // Check if this is a fresh session
+    if (!sessionStorage.getItem('splashShown')) {
+        // Mark splash as shown for this session
+        sessionStorage.setItem('splashShown', 'true');
         
-        setTimeout(function() {
-            const splash = document.querySelector('.splash-screen');
-            splash.style.opacity = '0';
+        // Show splash screen
+        document.body.classList.add('splash-active');
+        
+        const minDisplayTime = 2000;
+        const startTime = new Date().getTime();
+        
+        window.addEventListener('load', function() {
+            const endTime = new Date().getTime();
+            const loadTime = endTime - startTime;
+            const remainingTime = Math.max(0, minDisplayTime - loadTime);
             
             setTimeout(function() {
-                splash.style.display = 'none';
-                document.querySelector('.main-content').style.display = 'block';
-                document.body.classList.remove('splash-active');
-            }, 500);
-        }, remainingTime);
-    });
-    
-    // Fallback
-    setTimeout(function() {
-        const splash = document.querySelector('.splash-screen');
-        if (splash.style.display !== 'none') {
-            splash.style.opacity = '0';
-            setTimeout(function() {
-                splash.style.display = 'none';
-                document.querySelector('.main-content').style.display = 'block';
-                document.body.classList.remove('splash-active');
-            }, 500);
-        }
-    }, minDisplayTime + 1000);
+                const splash = document.querySelector('.splash-screen');
+                if (splash) {
+                    splash.style.opacity = '0';
+                    
+                    setTimeout(function() {
+                        splash.style.display = 'none';
+                        document.querySelector('.main-content').style.display = 'block';
+                        document.body.classList.remove('splash-active');
+                    }, 500);
+                }
+            }, remainingTime);
+        });
+        
+        // Fallback
+        setTimeout(function() {
+            const splash = document.querySelector('.splash-screen');
+            if (splash && splash.style.display !== 'none') {
+                splash.style.opacity = '0';
+                setTimeout(function() {
+                    splash.style.display = 'none';
+                    document.querySelector('.main-content').style.display = 'block';
+                    document.body.classList.remove('splash-active');
+                }, 500);
+            }
+        }, minDisplayTime + 1000);
+    } else {
+        // If splash was already shown, immediately show content
+        document.querySelector('.splash-screen').style.display = 'none';
+        document.querySelector('.main-content').style.display = 'block';
+    }
 });
 
 // Update Countdown Timer
