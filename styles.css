@@ -985,6 +985,7 @@ text-align: center;
   text-align: center;
   width: 140px;
   flex-shrink: 0;
+  cursor: pointer;
 }
 
 @media (min-width: 768px) {
