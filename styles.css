@@ -494,7 +494,7 @@ border-radius: 50%;
   @media (max-width: 768px) {
       .dots {
           position: absolute;
-          top: 146px;
+          top: 215px;
           right: 17.5px;
           display: flex;
           gap: 5px;
@@ -505,7 +505,7 @@ border-radius: 50%;
   @media (min-width: 768px) and (max-width: 992px) {
       .dots {
           position: absolute;
-          top: 155px;
+          top: 225px;
           right: 30px;
           display: flex;
           gap: 5px;
@@ -675,7 +675,7 @@ text-align: center;
 }
 
 .suggested-products h2 {
-  font-size: 24px;
+  font-size: 20px;
   margin-bottom: 14px;
   color: var(--dark-color);
   margin-top: -2px;
@@ -756,6 +756,13 @@ text-align: center;
 .products-header h2 {
   font-size: 24px;
   color: var(--dark-color);
+}
+
+@media (max-width: 768px) {
+  .products-header h2 {
+  font-size: 20px;
+  color: var(--dark-color);
+}
 }
 
 .view-all {
@@ -946,6 +953,13 @@ text-align: center;
   margin-top: -5px;
   margin-bottom: -30px;
   padding: 20px;
+  font-size: 24px;
+}
+
+@media (max-width: 768px) {
+  .new-product-card h2 {
+    font-size: 20px;
+  }
 }
 
 .new-products {
@@ -1780,3 +1794,52 @@ text-align: center;
 .buy-now-btn i {
   margin-right: 3px;
 }
+
+ .install-bar {
+      position: relative;
+      top: 0;
+      width: 100%;
+      background-color: #0f0f0f;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 16px;
+      z-index: 1000;
+      font-size: 14px;
+    }
+
+    .install-text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.2;
+    }
+
+    .install-text strong {
+      font-size: 15px;
+    }
+
+    .install-btn {
+      padding: 6px 14px;
+      background: transparent;
+      border: 1px solid #3a82f7;
+      color: #3a82f7;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 18px;
+      margin-right: 10px;
+      cursor: pointer;
+    }
+
+    .install-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
