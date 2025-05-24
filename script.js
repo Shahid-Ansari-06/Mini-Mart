@@ -136,16 +136,22 @@ gridElement.addEventListener('click', function (e) {
 function shareProduct(product) {
     const shareData = {
         title: product.title || "Check this out!",
-        text: product.description || "Look at this product I found!",
+        text: product.description || "Look what I found!",
         url: product.link || window.location.href,
     };
 
-    if (navigator.share) {
+    if (navigator.share && navigator.canShare && navigator.canShare(shareData)) {
         navigator.share(shareData)
+            .then(() => console.log("Share successful"))
             .catch(err => {
-                console.error("Native share failed:", err);
+                console.error("Sharing failed:", err);
                 fallbackShare(shareData);
             });
+    } else if (navigator.share) {
+        navigator.share(shareData).catch(err => {
+            console.error("Sharing failed:", err);
+            fallbackShare(shareData);
+        });
     } else {
         fallbackShare(shareData);
     }
